@@ -22,7 +22,7 @@ module.exports = {
     },
     updateGame: function (req, res) {
         db.Game
-            .findOneAndUpdate({ _id: req.params.id },{ pgn: req.body.pgn, blackPlayer:req.body.blackPlayer, whitePlayer:req.body.whitePlayer }, { new:true })
+            .findOneAndUpdate({ _id: req.params.id },{ pgn: req.body.pgn }, { new:true })
             .then(game => res.json(game))
             .catch(err => res.status(422).json(err));
     },

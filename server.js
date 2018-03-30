@@ -12,6 +12,8 @@ const bodyParser = require('body-parser');
 const io = require('socket.io')();
 const cookieparser = require('cookie-parser');
 const session = require('express-session');
+const axios = require('axios');
+const Chess = require('chess.js').Chess;
 
 const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/chessnuts";
 mongoose.Promise = Promise;
@@ -55,12 +57,36 @@ app.use(routes);
 
 io.on('connection', (client) => {
   // here you can start emitting events to the client 
+  console.log(client.handshake.headers.referer);
   client.on('subscribeToTimer', (interval) => {
     console.log('client is subscribing to timer with interval ', interval);
     setInterval(() => {
       client.emit('timer', new Date());
     }, interval);
   });
+
+  client.on('postMove', (source, target, gameId) => {
+    console.log('Client posted a move', source, target, gameId);
+    axios.get('http://localhost:3001/api/games/' + gameId)
+      .then(res => {
+        game = new Chess();
+        game.load_pgn(res.data.pgn);
+        const move = game.move({
+          from: source,
+          to: target,
+          promotion: 'q' // NOTE: always promote to a queen for example simplicity
+        });
+        if (move) {
+          io.emit('sendPGN', game.pgn());
+          axios.put('http://localhost:3001/api/games/' + gameId, {
+            pgn: game.pgn()
+          });
+        }
+        else client.emit('sendPGN', 'Invalid move');
+      })
+      .catch(err => console.log(err));
+  });
+
 });
 
 const server = app.listen(PORT, function () {

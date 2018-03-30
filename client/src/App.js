@@ -10,10 +10,10 @@ import AppBar from 'material-ui/AppBar';
 import { subscribeToTimer } from './api';
 
 class App extends Component {
-  
+
   constructor(props) {
     super(props);
-    subscribeToTimer(100, (err, timestamp) => this.setState({timestamp}));
+    subscribeToTimer(100, (err, timestamp) => this.setState({ timestamp }));
   }
   state = {
     timestamp: 'no timestamp yet'
