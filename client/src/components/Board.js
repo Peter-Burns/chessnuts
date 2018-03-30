@@ -15,7 +15,7 @@ class Board extends Component {
         let config;
         let board;
         let game;
-        axios.get(process.env.MONGODB_URI ? 'https://chessnuts.herokuapp.com' : 'http://localhost:3001' + '/api/games/5abbd6815980aa2a5099ade2')
+        axios.get('/api/games/5abbd6815980aa2a5099ade2')
             .then(res => {
                 game = new Chess();
                 game.load_pgn(res.data.pgn);
