@@ -67,7 +67,7 @@ io.on('connection', (client) => {
 
   client.on('postMove', (source, target, gameId) => {
     console.log('Client posted a move', source, target, gameId);
-    axios.get('/api/games/' + gameId)
+    axios.get(process.env.MONGODB_URI ? 'https://chessnuts.herokuapp.com' : 'http://localhost:3001' + '/api/games/' + gameId)
       .then(res => {
         game = new Chess();
         game.load_pgn(res.data.pgn);
@@ -78,7 +78,7 @@ io.on('connection', (client) => {
         });
         if (move) {
           io.emit('sendPGN', game.pgn());
-          axios.put('/api/games/' + gameId, {
+          axios.put(process.env.MONGODB_URI ? 'https://chessnuts.herokuapp.com' : 'http://localhost:3001' + '/api/games/' + gameId, {
             pgn: game.pgn()
           });
         }
