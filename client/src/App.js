@@ -13,7 +13,7 @@ class App extends Component {
   
   constructor(props) {
     super(props);
-    subscribeToTimer((err, timestamp) => this.setState({timestamp:timestamp}));
+    subscribeToTimer(100, (err, timestamp) => this.setState({timestamp}));
   }
   state = {
     timestamp: 'no timestamp yet'

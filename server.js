@@ -63,9 +63,8 @@ io.on('connection', (client) => {
   });
 });
 
-io.listen(8000);
-console.log('listening on port 8000');
-
-app.listen(PORT, function () {
+const server = app.listen(PORT, function () {
   console.log(`🌎 ==> Server now on port ${PORT}!`);
 });
+
+io.listen(server);
