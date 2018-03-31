@@ -14,7 +14,7 @@ const cookieparser = require('cookie-parser');
 const session = require('express-session');
 const axios = require('axios');
 const Chess = require('chess.js').Chess;
-
+const live = process.env.NODE_ENV === 'production';
 const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/chessnuts";
 mongoose.Promise = Promise;
 mongoose.connect(MONGODB_URI, {});
@@ -62,7 +62,7 @@ io.on('connection', (client) => {
 
   client.on('postMove', (source, target, gameId) => {
     console.log('Client posted a move', source, target, gameId);
-    axios.get(process.env.NODE_ENV === 'production' ? 'https://chessnuts.herokuapp.com' : 'http://localhost:3001' + '/api/games/' + gameId)
+    axios.get(live ? 'https://chessnuts.herokuapp.com' : 'http://localhost:3001' + '/api/games/' + gameId)
       .then(res => {
         game = new Chess();
         game.load_pgn(res.data.pgn);
@@ -73,7 +73,7 @@ io.on('connection', (client) => {
         });
         if (move) {
           io.emit('sendPGN', game.pgn());
-          axios.put(process.env.NODE_ENV === 'production' ? 'https://chessnuts.herokuapp.com' : 'http://localhost:3001' + '/api/games/' + gameId, {
+          axios.put(live ? 'https://chessnuts.herokuapp.com' : 'http://localhost:3001' + '/api/games/' + gameId, {
             pgn: game.pgn()
           });
         }
