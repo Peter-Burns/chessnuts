@@ -19,11 +19,6 @@ const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/chessnuts";
 mongoose.Promise = Promise;
 mongoose.connect(MONGODB_URI, {});
 
-// Serve up static assets (usually on heroku)
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static("client/build"));
-}
-
 const User = require('./models/User');
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
