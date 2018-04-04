@@ -26,6 +26,7 @@ class Board extends Component {
                     onDrop: onDrop
                 };
                 board = ChessBoard('board', config);
+                $(window).resize(board.resize);
             })
             .catch(err => console.log(err));
 
@@ -47,7 +48,7 @@ class Board extends Component {
     }
     render() {
         return (
-            <div id="board" style={{ width: "60%" }}>
+            <div id="board" style={{ width: "100%" }}>
 
             </div>
         )

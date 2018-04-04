@@ -9,7 +9,7 @@ class Game extends Component {
         return (
             <Grid fluid>
                 <Row center="xs">
-                    <Col className="center" xs={6} xsOffset={3}>
+                    <Col lg={4} md={6} sm={9} xs={12}>
                         <Board />
                     </Col>
                 </Row>
