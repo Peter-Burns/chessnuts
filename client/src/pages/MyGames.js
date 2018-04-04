@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 import { ListItem } from 'material-ui/List';
 import axios from 'axios';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import ChessBoard from "chessboardjs";
 import $ from 'jquery';
 import Chess from 'chess.js';
@@ -32,17 +32,16 @@ class MyGames extends Component {
     render() {
         return (
             <Grid fluid>
-                <Row center="xs">
+                <Row>
                     {this.state.games.map(game => (
                         <Col key={game._id} lg={4} md={6} xs={12}>
-                            <Link style={{ color: 'white', textDecorationLine: 'none' }} to={'/game/' + game._id}>
+                            <a href={'/game/' + game._id} style={{ color: 'white', textDecorationLine: 'none' }}>
                                 <ListItem>
-
                                     <span>Black: {game.blackPlayer.username}</span>
                                     <div id={game._id} style={{ width: '100%' }} />
                                     <span>White: {game.whitePlayer.username} </span>
                                 </ListItem>
-                            </Link>
+                            </a>
                             <button onClick={(event) => { this.gameLoad(game.pgn, game._id); event.target.remove(); }}>View game</button>
                         </Col>
                     ))}

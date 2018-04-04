@@ -15,6 +15,10 @@ const GameSchema = new Schema({
     blackPlayer: {
         type: Schema.Types.ObjectId,
         ref: "User",
+    },
+    joinable: {
+        type:Boolean,
+        default:true
     }
 });
 

@@ -3,6 +3,7 @@ import "./App.css";
 import Navbar from "./components/Navbar";
 import Login from "./pages/Login";
 import Game from './pages/Game';
+import JoinGame from './pages/JoinGame';
 import MyGames from './pages/MyGames';
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -53,7 +54,7 @@ class App extends Component {
             <Switch>
               <Route path="/game/:id" component={Game} />
               <Route exact path="/mygames" component={MyGames}/>
-              <Route exact path="/joingame" />
+              <Route exact path="/joingame" component={JoinGame}/>
               <Route exact path="/startgame" />
               <Route exact path="/login" component={Login} />
             </Switch>
