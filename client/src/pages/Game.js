@@ -4,13 +4,12 @@ import Board from "../components/Board";
 
 
 class Game extends Component {
-    
     render() {
         return (
             <Grid fluid>
                 <Row center="xs">
                     <Col lg={4} md={6} sm={9} xs={12}>
-                        <Board />
+                        <Board gameId={this.props.match.params.id}/>
                     </Col>
                 </Row>
             </Grid>

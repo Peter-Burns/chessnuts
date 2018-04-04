@@ -3,6 +3,7 @@ import "./App.css";
 import Navbar from "./components/Navbar";
 import Login from "./pages/Login";
 import Game from './pages/Game';
+import MyGames from './pages/MyGames';
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -51,7 +52,7 @@ class App extends Component {
             <p style={{ color: this.state.theme.palette.textColor }}>This is the timer value: {this.state.timestamp}</p>
             <Switch>
               <Route path="/game/:id" component={Game} />
-              <Route exact path="/mygames"/>
+              <Route exact path="/mygames" component={MyGames}/>
               <Route exact path="/joingame" />
               <Route exact path="/startgame" />
               <Route exact path="/login" component={Login} />

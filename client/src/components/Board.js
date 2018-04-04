@@ -15,7 +15,8 @@ class Board extends Component {
         let config;
         let board;
         let game;
-        axios.get('/api/games/5abbd6815980aa2a5099ade2')
+        const gameId = this.props.gameId;
+        axios.get('/api/games/' + gameId)
             .then(res => {
                 game = new Chess();
                 game.load_pgn(res.data.pgn);
@@ -38,7 +39,7 @@ class Board extends Component {
             });
             // illegal move
             if (move === null) return 'snapback';
-            postMove(source, target, '5abbd6815980aa2a5099ade2');
+            postMove(source, target, gameId);
         }
         pgnUpdater((err, PGN) => {
             console.log(PGN); 
@@ -49,7 +50,7 @@ class Board extends Component {
     render() {
         return (
             <div id="board" style={{ width: "100%" }}>
-
+                
             </div>
         )
     }

@@ -3,8 +3,10 @@ const db = require("../models");
 module.exports = {
     findAll: function (req, res) {
         db.Game
-            .find({})
+            .find({ $or: [ { whitePlayer: req.user.id }, { blackPlayer: req.user.id } ] })
             .sort({ _id: -1 })
+            .populate('whitePlayer')
+            .populate('blackPlayer')
             .then(dbModel => res.json(dbModel))
             .catch(err => res.status(422).json(err));
     },

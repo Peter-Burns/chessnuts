@@ -26,6 +26,15 @@ const Navbar = (props) => {
             console.log(err);
         });
     }
+    const myGames = () => {
+        props.history.push('/mygames');
+    }
+    const startGame = () => {
+        props.history.push('/startgame');
+    }
+    const joinGame = () => {
+        props.history.push('/joingame');
+    }
     const {user} = props;
     return (
         <AppBar title="Chessnuts"
@@ -44,9 +53,11 @@ const Navbar = (props) => {
                     rightIcon={<ArrowDropRight />}
                     menuItems={[
                         <MenuItem primaryText="My Games" 
-                        onClick={login}/>,
-                        <MenuItem primaryText="Join Game" />,
-                        <MenuItem primaryText="Start Game" />,
+                        onClick={myGames}/>,
+                        <MenuItem primaryText="Join Game" 
+                        onClick={joinGame}/>,
+                        <MenuItem primaryText="Start Game" 
+                        onClick={startGame}/>,
                     ]}
                 />
                 <MenuItem primaryText="Log out" onClick={logout} />
