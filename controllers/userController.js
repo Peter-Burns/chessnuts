@@ -28,4 +28,12 @@ module.exports = {
             res.json({ username: username, id: _id });
         });
     },
+    currentuser: function (req, res) {
+        if (!req.user) {
+            return res.status(401).json({
+                message: 'You are not currently logged in.'
+            });
+        }
+        res.json({username: req.user.username, id:req.user._id});
+    }
 };

@@ -47,7 +47,7 @@ class Board extends Component {
     }
     render() {
         return (
-            <div id="board" style={{ width: "400px" }}>
+            <div id="board" style={{ width: "60%" }}>
 
             </div>
         )
