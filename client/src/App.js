@@ -8,7 +8,6 @@ import MyGames from './pages/MyGames';
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import { subscribeToTimer } from './api';
 import { withUser, update } from './services/withUser';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import axios from 'axios';
@@ -16,12 +15,7 @@ import axios from 'axios';
 
 class App extends Component {
 
-  constructor(props) {
-    super(props);
-    subscribeToTimer(100, (err, timestamp) => this.setState({ timestamp }));
-  }
   state = {
-    timestamp: 'no timestamp yet',
     theme: darkBaseTheme
   };
   componentDidMount() {
@@ -50,7 +44,6 @@ class App extends Component {
           <Fragment>
             <Navbar
               user={user} />
-            <p style={{ color: this.state.theme.palette.textColor }}>This is the timer value: {this.state.timestamp}</p>
             <Switch>
               <Route path="/game/:id" component={Game} />
               <Route exact path="/mygames" component={MyGames}/>

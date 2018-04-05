@@ -31,8 +31,8 @@ class JoinGame extends Component {
                         : this.state.games.map(game => (
                             <Col key={game._id} lg={4} md={6} xs={12}>
                                 <ListItem>
-                                    <span>White: {game.whitePlayer ? game.whitePlayer.username : <JoinButton color="white" gameId={game._id} onClick={() => this.joinGame(game._id, 'whitePlayer')} />} </span>
-                                    <span>Black: {game.blackPlayer ? game.blackPlayer.username : <JoinButton color="black" gameId={game._id} onClick={() => this.joinGame(game._id, 'blackPlayer')} />} </span>
+                                    <span>White: {game.whitePlayer ? game.whitePlayer.username : <JoinButton onClick={() => this.joinGame(game._id, 'whitePlayer')} />} </span>
+                                    <span>Black: {game.blackPlayer ? game.blackPlayer.username : <JoinButton onClick={() => this.joinGame(game._id, 'blackPlayer')} />} </span>
                                 </ListItem>
                             </Col>
                         ))}

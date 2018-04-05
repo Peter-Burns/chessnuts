@@ -25,7 +25,7 @@ class Login extends Component {
         })
         .then(user => {
             update(user.data);
-            history.push('/');
+            history.push('/mygames');
         })
         .catch(err => console.log(err));
     }

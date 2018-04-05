@@ -52,12 +52,12 @@ app.use(routes);
 
 io.on('connection', (client) => {
   // here you can start emitting events to the client 
-  console.log(client.handshake.headers.referer);
-  client.on('subscribeToTimer', (interval) => {
-    console.log('client is subscribing to timer with interval ', interval);
-    setInterval(() => {
-      client.emit('timer', new Date());
-    }, interval);
+  const room = client.handshake.headers.referer.split('/').pop();
+  client.join(room);
+  console.log('Client joined room: ' + room);
+  client.on('disconnect', function() {
+    client.leave(room)
+    console.log('user disconnected');
   });
 
   client.on('postMove', (source, target, gameId) => {
@@ -72,7 +72,7 @@ io.on('connection', (client) => {
           promotion: 'q' // NOTE: always promote to a queen for example simplicity
         });
         if (move) {
-          io.emit('sendPGN', game.pgn());
+          io.to(room).emit('sendPGN', game.pgn());
           axios.put((live ? 'https://chessnuts.herokuapp.com' : 'http://localhost:3001') + '/api/games/' + gameId, {
             pgn: game.pgn()
           });

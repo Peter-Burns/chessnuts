@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Grid, Row, Col } from 'react-flexbox-grid';
-import { ListItem } from 'material-ui/List';
+import { List, ListItem } from 'material-ui/List';
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 import ChessBoard from "chessboardjs";
@@ -32,19 +32,26 @@ class MyGames extends Component {
     render() {
         return (
             <Grid fluid>
-                <Row>
-                    {this.state.games.map(game => (
-                        <Col key={game._id} lg={4} md={6} xs={12}>
-                            <a href={'/game/' + game._id} style={{ color: 'white', textDecorationLine: 'none' }}>
-                                <ListItem>
-                                    <span>Black: {game.blackPlayer.username}</span>
-                                    <div id={game._id} style={{ width: '100%' }} />
-                                    <span>White: {game.whitePlayer.username} </span>
+                <Row center="xs">
+                    <Col lg={4} md={6} xs={12}>
+                        <List>
+                            {this.state.games.map(game => (
+                                <ListItem key={game._id} style={{ textAlign: 'center' }}>
+                                    <a href={'/game/' + game._id} style={{ color: 'white', textDecorationLine: 'none' }}>
+
+                                        <span>Black: {game.blackPlayer ? game.blackPlayer.username: "No player yet"}</span>
+                                        <div id={game._id} style={{ width: '100%', maxWidth: '400px', margin: '0 auto' }} />
+                                        <span>White: {game.whitePlayer ? game.whitePlayer.username: "No player yet"} </span>
+
+                                    </a>
+                                    <div>
+                                        <button onClick={(event) => { this.gameLoad(game.pgn, game._id); event.target.remove(); }}>View game</button>
+                                    </div>
                                 </ListItem>
-                            </a>
-                            <button onClick={(event) => { this.gameLoad(game.pgn, game._id); event.target.remove(); }}>View game</button>
-                        </Col>
-                    ))}
+
+                            ))}
+                        </List>
+                    </Col>
                 </Row>
             </Grid>
         );
