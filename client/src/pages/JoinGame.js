@@ -25,11 +25,11 @@ class JoinGame extends Component {
     render() {
         return (
             <Grid fluid>
-                <Row>
+                <Row center="xs">
                     {!this.state.games[0] ?
                         <p style={{ color: "white" }}> No joinable games, would you like to <Link to='/startGame'><button> start one?</button></Link ></p>
                         : this.state.games.map(game => (
-                            <Col key={game._id} lg={4} md={6} xs={12}>
+                            <Col key={game._id} md={9} xs={12}>
                                 <ListItem>
                                     <span>White: {game.whitePlayer ? game.whitePlayer.username : <JoinButton onClick={() => this.joinGame(game._id, 'whitePlayer')} />} </span>
                                     <span>Black: {game.blackPlayer ? game.blackPlayer.username : <JoinButton onClick={() => this.joinGame(game._id, 'blackPlayer')} />} </span>

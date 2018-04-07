@@ -1,6 +1,9 @@
 import React, { Component, Fragment } from "react";
 import "./App.css";
+import AppBar from 'material-ui/AppBar';
 import Navbar from "./components/Navbar";
+import PrivateRoute from "./components/PrivateRoute";
+import Logo from "./components/Logo";
 import Login from "./pages/Login";
 import Game from './pages/Game';
 import JoinGame from './pages/JoinGame';
@@ -11,13 +14,18 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { withUser, update } from './services/withUser';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import axios from 'axios';
+import Drawer from 'material-ui/Drawer';
+import MenuItem from 'material-ui/MenuItem';
+import StartGame from "./pages/StartGame";
 
 
 class App extends Component {
 
   state = {
-    theme: darkBaseTheme
+    theme: darkBaseTheme,
+    open: false
   };
+
   componentDidMount() {
     // this is going to double check that the user is still actually logged in
     // if the app is reloaded. it's possible that we still have a user in sessionStorage
@@ -35,7 +43,7 @@ class App extends Component {
         }
       });
   }
-
+  handleToggle = () => this.setState({ open: !this.state.open });
   render() {
     const { user } = this.props;
     return (
@@ -43,14 +51,22 @@ class App extends Component {
         <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
           <Fragment>
             <Navbar
+              logoClick={this.handleToggle}
               user={user} />
             <Switch>
               <Route path="/game/:id" component={Game} />
-              <Route exact path="/mygames" component={MyGames}/>
-              <Route exact path="/joingame" component={JoinGame}/>
-              <Route exact path="/startgame" />
+              <PrivateRoute exact path="/mygames" component={MyGames} />
+              <PrivateRoute exact path="/joingame" component={JoinGame} />
+              <PrivateRoute exact path="/startgame" component={StartGame}/>
               <Route exact path="/login" component={Login} />
             </Switch>
+            <Drawer open={this.state.open} docked={true} onRequestChange={(open) => this.setState({ open })}>
+              <AppBar title="Chess Nuts" 
+              iconElementLeft={<Logo onClick={this.handleToggle} />}
+              showMenuIconButton={true} />
+              <MenuItem>Menu Item</MenuItem>
+              <MenuItem>Menu Item 2</MenuItem>
+            </Drawer>
           </Fragment>
         </MuiThemeProvider>
       </Router>

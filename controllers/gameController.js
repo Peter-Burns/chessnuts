@@ -3,7 +3,10 @@ const db = require("../models");
 module.exports = {
     findAll: function (req, res) {
         db.Game
-            .find({ $or: [{ whitePlayer: req.user.id }, { blackPlayer: req.user.id }] })
+            .find({
+                $and: [{ result: null },
+                { $or: [{ whitePlayer: req.user.id }, { blackPlayer: req.user.id }] }]
+            })
             .sort({ _id: -1 })
             .populate('whitePlayer')
             .populate('blackPlayer')
@@ -36,7 +39,7 @@ module.exports = {
     },
     joinableGames: function (req, res) {
         db.Game
-            .find({ joinable: true })
+            .find({$and : [{ joinable: true }, { $nor: [{ whitePlayer: req.user.id }, { blackPlayer: req.user.id }] }]})
             .populate('whitePlayer')
             .populate('blackPlayer')
             .then(dbModel => res.json(dbModel))

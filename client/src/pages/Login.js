@@ -53,8 +53,7 @@ class Login extends Component {
                                 />
                             </div>
                             <div>
-                                <RaisedButton primary type="submit">
-                                    Log In
+                                <RaisedButton label="Login"primary type="submit">                                   
                                 </RaisedButton>
                             </div>
                         </form>

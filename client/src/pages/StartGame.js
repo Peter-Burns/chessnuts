@@ -1,59 +1,57 @@
 import React, { Component } from 'react';
 import { Grid, Row, Col } from 'react-flexbox-grid';
-import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
+import FlatButton from 'material-ui/FlatButton';
 import axios from 'axios';
+import { withUser } from '../services/withUser';
+import Toggle from 'material-ui/Toggle';
+import ChessBoard from "chessboardjs";
+import '../chessboard-0.3.0.css';
+import $ from 'jquery';
+
+window.$ = $;
+window.jQuery = $;
 
 class StartGame extends Component {
     state = {
-        username: null,
-        password: null,
+        white: true,
+        board: null
     }
-    handleInputChange = (event) => {
-        this.setState({
-            [event.target.name]: event.target.value
-        });
+
+    componentDidMount() {
+        const board = ChessBoard('board', 'start');
+        $(window).resize(board.resize);
+        this.setState({ board: board });
     }
-    handleLogin = (event) => {
+    changeColor(event, isChecked) {
+        this.setState({ white: isChecked });
+        this.state.board.flip();
+    }
+    createGame(event) {
         event.preventDefault();
-        const {username, password} = this.state;
-        const {history} = this.props;
-        axios.post('/api/users/login',{
-            username,
-            password
-        })
-        .then(user => {
-            history.push('/mygames');
-        })
-        .catch(err => console.log(err));
+        const { history, user } = this.props;
+        const playerColor = this.state.white ? "whitePlayer" : "blackPlayer";
+        axios.post('/api/games', { [playerColor]: user.id })
+            .then(history.push('/mygames'))
+            .catch(err => console.log(err));
     }
     render() {
         return (
             <Grid fluid>
-                <Row>
-                    <Col xs={6} xsOffset={3}>
-                        <form onSubmit={this.handleLogin}>
+                <Row center="md">
+                    <Col lg={4} md={6} sm={9} xs={12} >
+                        <form onSubmit={(event) => this.createGame(event)}>
+                            <div id="board" style={{ width: '100%', maxWidth:'600px'}} />
                             <div>
-                                <TextField
-                                name="username"
-                                hintText="Username"
-                                floatingLabelText="Username"
-                                onChange={this.handleInputChange}
+                                <Toggle
+                                    style={{ maxWidth: 250 }}
+                                    label={this.state.white ? 'White' : 'Black'}
+                                    toggled={this.state.white}
+                                    onToggle={(event, isChecked) => this.changeColor(event, isChecked)}
                                 />
                             </div>
                             <div>
-                                <TextField
-                                name="password"
-                                hintText="Password"
-                                floatingLabelText="Password"
-                                type="password"
-                                onChange={this.handleInputChange}
-                                />
-                            </div>
-                            <div>
-                                <RaisedButton primary type="submit">
-                                    Log In
-                                </RaisedButton>
+                                <FlatButton label='Create Game' backgroundColor={'#0097a7'} hoverColor={'#ff4081'} type="submit">
+                                </FlatButton>
                             </div>
                         </form>
                     </Col>
@@ -62,4 +60,4 @@ class StartGame extends Component {
         );
     }
 }
-export default StartGame;
+export default withUser(StartGame);

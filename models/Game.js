@@ -19,6 +19,14 @@ const GameSchema = new Schema({
     joinable: {
         type:Boolean,
         default:true
+    },
+    gameover:{
+        type:Boolean,
+        default:false
+    },
+    result:{
+        type:String,
+        default:null
     }
 });
 
