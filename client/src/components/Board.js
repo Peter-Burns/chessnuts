@@ -34,16 +34,21 @@ class Board extends Component {
                     orientation: 'white',
                     draggable: true,
                     onDrop: onDrop,
-                    onDragStart: onDragStart
+                    onDragStart: onDragStart,
+                    onMouseoutSquare: onMouseoutSquare,
+                    onMouseoverSquare: onMouseoverSquare,
+                    onSnapEnd: onSnapEnd
                 };
                 board = ChessBoard('board', config);
                 userColor = this.state.userColor;
                 this.setState({ board: board });
+                if (userColor === 'b') this.flipBoard();
                 $(window).resize(board.resize);
             })
             .catch(err => console.log(err));
 
         function onDrop(source, target) {
+            removeGreySquares();
             const move = game.move({
                 from: source,
                 to: target,
@@ -56,11 +61,11 @@ class Board extends Component {
 
         function onDragStart(source, piece, position, orientation) {
             console.log(userColor);
-            if (game.game_over() === true || 
-            (game.turn() === 'w' && piece.search(/^b/) !== -1) || 
-            (game.turn() === 'b' && piece.search(/^w/) !== -1) || 
-            (game.turn() === 'w' && userColor !== 'w') || 
-            (game.turn() === 'b' && userColor !== 'b')) {
+            if (game.game_over() === true ||
+                (game.turn() === 'w' && piece.search(/^b/) !== -1) ||
+                (game.turn() === 'b' && piece.search(/^w/) !== -1) ||
+                (game.turn() === 'w' && userColor !== 'w') ||
+                (game.turn() === 'b' && userColor !== 'b')) {
                 return false;
             }
         };
@@ -70,6 +75,45 @@ class Board extends Component {
             game.load_pgn(PGN);
             board.position(game.fen());
         });
+        function removeGreySquares() {
+            $('#board .square-55d63').css('background', '');
+        };
+
+        function greySquare(square) {
+            var squareEl = $('#board .square-' + square);
+            var background = '#a9a9a9';
+            if (squareEl.hasClass('black-3c85d') === true) {
+                background = '#696969';
+            }
+            squareEl.css('background', background);
+        };
+
+        function onMouseoverSquare(square, piece) {
+            // get list of possible moves for this square
+            var moves = game.moves({
+                square: square,
+                verbose: true
+            });
+
+            // exit if there are no moves available for this square
+            if (moves.length === 0) return;
+
+            // highlight the square they moused over
+            greySquare(square);
+
+            // highlight the possible squares for this piece
+            for (var i = 0; i < moves.length; i++) {
+                greySquare(moves[i].to);
+            }
+        };
+
+        function onMouseoutSquare(square, piece) {
+            removeGreySquares();
+        };
+
+        function onSnapEnd () {
+            board.position(game.fen());
+        };
     }
     flipBoard() {
         this.state.board.flip();
