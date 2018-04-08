@@ -43,7 +43,7 @@ const Navbar = (props) => {
             onTitleClick={goHome}
             showMenuIconButton={true}
             style={{ background: '#663300' }}
-            titleStyle={{ color: '#ffb366' }}
+            titleStyle={{ color: '#ffb366', fontFamily: "'Jua', sans-serif" }}
             iconElementLeft={<Logo onClick={props.logoClick} />}
             iconElementRight={!user ? <LoginButton onClick={login} /> :
                 <IconMenu

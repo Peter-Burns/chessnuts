@@ -5,6 +5,7 @@ import Navbar from "./components/Navbar";
 import PrivateRoute from "./components/PrivateRoute";
 import Logo from "./components/Logo";
 import Login from "./pages/Login";
+import LandingPage from "./pages/LandingPage";
 import Game from './pages/Game';
 import JoinGame from './pages/JoinGame';
 import MyGames from './pages/MyGames';
@@ -21,7 +22,7 @@ import StartGame from "./pages/StartGame";
 class App extends Component {
 
   state = {
-    open: false
+    open: true
   };
 
   componentDidMount() {
@@ -52,6 +53,7 @@ class App extends Component {
               logoClick={this.handleToggle}
               user={user} />
             <Switch>
+              <Route exact path = "/" component = {LandingPage} />
               <Route path="/game/:id" component={Game} />
               <PrivateRoute exact path="/mygames" component={MyGames} />
               <PrivateRoute exact path="/joingame" component={JoinGame} />

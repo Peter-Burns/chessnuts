@@ -15,19 +15,33 @@ class Login extends Component {
             [event.target.name]: event.target.value
         });
     }
-    handleLogin = (event) => {
+    registerUser = (event) => {
         event.preventDefault();
-        const {username, password} = this.state;
-        const {history} = this.props;
-        axios.post('/api/users/login',{
+        const { username, password } = this.state;
+        const { history } = this.props;
+        axios.post('api/users', {
             username,
             password
         })
-        .then(user => {
-            update(user.data);
-            history.push('/mygames');
+            .then(user => {
+                update(user.data);
+                history.push('/mygames');
+            })
+            .catch(err => console.log(err));
+    }
+    handleLogin = (event) => {
+        event.preventDefault();
+        const { username, password } = this.state;
+        const { history } = this.props;
+        axios.post('/api/users/login', {
+            username,
+            password
         })
-        .catch(err => console.log(err));
+            .then(user => {
+                update(user.data);
+                history.push('/mygames');
+            })
+            .catch(err => console.log(err));
     }
     render() {
         return (
@@ -37,23 +51,25 @@ class Login extends Component {
                         <form onSubmit={this.handleLogin}>
                             <div>
                                 <TextField
-                                name="username"
-                                hintText="Username"
-                                floatingLabelText="Username"
-                                onChange={this.handleInputChange}
+                                    name="username"
+                                    hintText="Username"
+                                    floatingLabelText="Username"
+                                    onChange={this.handleInputChange}
                                 />
                             </div>
                             <div>
                                 <TextField
-                                name="password"
-                                hintText="Password"
-                                floatingLabelText="Password"
-                                type="password"
-                                onChange={this.handleInputChange}
+                                    name="password"
+                                    hintText="Password"
+                                    floatingLabelText="Password"
+                                    type="password"
+                                    onChange={this.handleInputChange}
                                 />
                             </div>
                             <div>
-                                <RaisedButton label="Login"primary type="submit">                                   
+                                <RaisedButton label="Login" primary type="submit">
+                                </RaisedButton>
+                                <RaisedButton onClick={this.registerUser} style={{ marginLeft: '20px' }} label="Register" secondary type="submit">
                                 </RaisedButton>
                             </div>
                         </form>
