@@ -80,8 +80,8 @@ class Board extends Component {
         };
 
         function greySquare(square) {
-            var squareEl = $('#board .square-' + square);
-            var background = '#a9a9a9';
+            const squareEl = $('#board .square-' + square);
+            let background = '#a9a9a9';
             if (squareEl.hasClass('black-3c85d') === true) {
                 background = '#696969';
             }
@@ -90,7 +90,7 @@ class Board extends Component {
 
         function onMouseoverSquare(square, piece) {
             // get list of possible moves for this square
-            var moves = game.moves({
+            const moves = game.moves({
                 square: square,
                 verbose: true
             });
@@ -102,7 +102,7 @@ class Board extends Component {
             greySquare(square);
 
             // highlight the possible squares for this piece
-            for (var i = 0; i < moves.length; i++) {
+            for (let i = 0; i < moves.length; i++) {
                 greySquare(moves[i].to);
             }
         };

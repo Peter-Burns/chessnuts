@@ -33,7 +33,7 @@ class Login extends Component {
         return (
             <Grid fluid>
                 <Row>
-                    <Col xs={6} xsOffset={3}>
+                    <Col xs={3} xsOffset={3}>
                         <form onSubmit={this.handleLogin}>
                             <div>
                                 <TextField

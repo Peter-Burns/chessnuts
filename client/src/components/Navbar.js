@@ -42,6 +42,8 @@ const Navbar = (props) => {
             className="chessNav"
             onTitleClick={goHome}
             showMenuIconButton={true}
+            style={{ background: '#663300' }}
+            titleStyle={{ color: '#ffb366' }}
             iconElementLeft={<Logo onClick={props.logoClick} />}
             iconElementRight={!user ? <LoginButton onClick={login} /> :
                 <IconMenu
