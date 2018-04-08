@@ -27,7 +27,7 @@ class JoinGame extends Component {
             <Grid fluid>
                 <Row center="xs">
                     {!this.state.games[0] ?
-                        <p style={{ color: "white" }}> No joinable games, would you like to <Link to='/startGame'><button> start one?</button></Link ></p>
+                        <p style={{ color: "#663300" }}> No joinable games, would you like to <Link to='/startGame'><button> start one?</button></Link ></p>
                         : this.state.games.map(game => (
                             <Col key={game._id} md={9} xs={12}>
                                 <ListItem>

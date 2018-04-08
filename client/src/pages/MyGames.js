@@ -7,6 +7,7 @@ import ChessBoard from "chessboardjs";
 import $ from 'jquery';
 import Chess from 'chess.js';
 import '../chessboard-0.3.0.css';
+import FlatButton from 'material-ui/FlatButton';
 
 window.$ = $;
 window.jQuery = $;
@@ -37,7 +38,7 @@ class MyGames extends Component {
                         <List>
                             {this.state.games.map(game => (
                                 <ListItem key={game._id} style={{ textAlign: 'center' }}>
-                                    <a href={'/game/' + game._id} style={{ color: 'white', textDecorationLine: 'none' }}>
+                                    <a href={'/game/' + game._id} style={{ color: '#663300', textDecorationLine: 'none' }}>
 
                                         <span>Black: {game.blackPlayer ? game.blackPlayer.username: "No player yet"}</span>
                                         <div id={game._id} style={{ width: '100%', maxWidth: '400px', margin: '0 auto' }} />
@@ -45,7 +46,7 @@ class MyGames extends Component {
 
                                     </a>
                                     <div>
-                                        <button onClick={(event) => { this.gameLoad(game.pgn, game._id); event.target.remove(); }}>View game</button>
+                                        <FlatButton hoverColor="#ffb366"style={{ color:'#663300'}} onClick={(event) => { this.gameLoad(game.pgn, game._id);     event.target.parentNode.remove(); }}>View game</FlatButton>
                                     </div>
                                 </ListItem>
 

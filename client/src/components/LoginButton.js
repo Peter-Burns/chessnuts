@@ -2,7 +2,7 @@ import React from 'react';
 import FlatButton from 'material-ui/FlatButton';
 
 const LoginButton = (props) => (
-  <FlatButton label="Log In / Register" onClick={props.onClick} />
+  <FlatButton style={{color:'#ffb366'}} label="Log In / Register" onClick={props.onClick} />
 );
 
 export default LoginButton;

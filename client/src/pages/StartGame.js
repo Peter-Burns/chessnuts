@@ -50,7 +50,7 @@ class StartGame extends Component {
                                 />
                             </div>
                             <div>
-                                <FlatButton label='Create Game' backgroundColor={'#0097a7'} hoverColor={'#ff4081'} type="submit">
+                                <FlatButton label='Create Game' type="submit">
                                 </FlatButton>
                             </div>
                         </form>

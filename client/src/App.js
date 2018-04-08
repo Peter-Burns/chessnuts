@@ -8,7 +8,6 @@ import Login from "./pages/Login";
 import Game from './pages/Game';
 import JoinGame from './pages/JoinGame';
 import MyGames from './pages/MyGames';
-import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { withUser, update } from './services/withUser';
@@ -22,7 +21,6 @@ import StartGame from "./pages/StartGame";
 class App extends Component {
 
   state = {
-    theme: darkBaseTheme,
     open: false
   };
 
@@ -48,7 +46,7 @@ class App extends Component {
     const { user } = this.props;
     return (
       <Router>
-        <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
+        <MuiThemeProvider muiTheme={getMuiTheme()}>
           <Fragment>
             <Navbar
               logoClick={this.handleToggle}
@@ -57,13 +55,15 @@ class App extends Component {
               <Route path="/game/:id" component={Game} />
               <PrivateRoute exact path="/mygames" component={MyGames} />
               <PrivateRoute exact path="/joingame" component={JoinGame} />
-              <PrivateRoute exact path="/startgame" component={StartGame}/>
+              <PrivateRoute exact path="/startgame" component={StartGame} />
               <Route exact path="/login" component={Login} />
             </Switch>
-            <Drawer open={this.state.open} docked={true} onRequestChange={(open) => this.setState({ open })}>
-              <AppBar title="Chess Nuts" 
-              iconElementLeft={<Logo onClick={this.handleToggle} />}
-              showMenuIconButton={true} />
+            <Drawer open={this.state.open} containerStyle={{ background: '#fff3e6' }} docked={true} onRequestChange={(open) => this.setState({ open })}>
+              <AppBar title="Chess Nuts"
+                style={{ background: '#663300' }}
+                titleStyle={{ color: '#ffb366' }}
+                iconElementLeft={<Logo onClick={this.handleToggle} />}
+                showMenuIconButton={true} />
               <MenuItem>Menu Item</MenuItem>
               <MenuItem>Menu Item 2</MenuItem>
             </Drawer>
