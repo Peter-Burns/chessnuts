@@ -116,30 +116,44 @@ class Game extends Component {
             onSnapEnd: onSnapEnd
         };
         const board = ChessBoard('board', cfg);
+        const topCfg = {
+            position: 'start',
+            showNotation: false
+        }
+        const board1 = ChessBoard('board1', topCfg);
+        const board2 = ChessBoard('board2', topCfg);
         this.setState({ board: board, game: game });
         $(window).resize(board.resize);
+        $(window).resize(board1.resize);
+        $(window).resize(board2.resize);
     }
     render() {
         return (
             <Grid style={{ color: '#663300' }} fluid>
                 <Row style={{ fontFamily: "'Montserrat', sans-serif" }} center="xs">
-                    <Col lg={4} md={6} sm={9} xs={12}>
+                    <Col lg={4} lgOffset={2}md={6} sm={9} xs={12}>
                         <h3>Welcome to Chessnuts!</h3>
                         <p>Make an account to play, watch some of the top games going on below, or tinker around on the practice board</p>
+                        <h3>Top rated active games</h3>
+                        <Row>
+                            <Col xs={6}>
+                                <div id='board1' style={{ width: '100%' }} />
+                            </Col>
+                            <Col xs={6}>
+                                <div id='board2' style={{ width: '100%' }} />
+                            </Col>
+                        </Row>
                         <h4>Highest ranked player is currently Pete321 with a 2500 rating</h4>
                         <FlatButton backgroundColor='#ffb366' style={{ color: "#663300", fontFamily: "'Montserrat', sans-serif" }} label='See leaderboard' />
                         <p>{this.state.activeUsers} Active Users</p>
                         <p>{this.state.activeGames} Active Games</p>
-                        <h3>Top rated active games</h3>
                     </Col>
                     <Col lg={3} md={6} sm={9} xs={12}>
                         <h3>Test your skills on the practice board!</h3>
-                        <div id="board" style={{ width: "100%" }}>
-
-                        </div>
+                        <div id="board" style={{ width: "100%" }} />
                         <FlatButton label='Reset' backgroundColor='#ffb366' style={{ color: "#663300", fontFamily: "'Montserrat', sans-serif" }} onClick={() => this.moveListLoader([])} />
                     </Col>
-                    <Col lg={1}>
+                    <Col lg={2}>
                         <p>{this.state.boardState}</p>
                         {this.state.gameOver ? <p> If you're looking for a new challenge, why not make an account? <FlatButton label='Register' backgroundColor='#ffb366' style={{ color: "#663300", fontFamily: "'Montserrat', sans-serif" }} onClick={() => this.login()} /> </p> : ''}
                         <Row>
