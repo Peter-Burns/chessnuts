@@ -39,7 +39,7 @@ class MyGames extends Component {
     }
     render() {
         return (
-            <Grid>
+            <Grid style={{ fontFamily: "'Montserrat', sans-serif" }}>
                 <Row>
                     <Col xs={12}>
                         <Tabs
@@ -57,15 +57,15 @@ class MyGames extends Component {
 
                                             </a>
                                             <div>
-                                                <FlatButton hoverColor="#994d00" backgroundColor='#663300' style={{ color: '#fff3e6' }} onClick={(event) => { this.gameLoad(game.pgn, game._id); this.toggleViewGame(game._id); }}>View game</FlatButton>
+                                                <FlatButton hoverColor="#ffa64d" backgroundColor='#ffb366' label="View Game" style={{ color:'#663300',fontFamily: "'Montserrat', sans-serif" }} onClick={(event) => { this.gameLoad(game.pgn, game._id); this.toggleViewGame(game._id); }} />
                                             </div>
                                         </Col>
 
                                     )) : <Col xs={12} style={{ color: "#663300" }}>
                                             <p>
                                                 No active games, would you like to
-                                                <Link style={{ marginLeft: '5px' }} to='/startGame'><FlatButton label="start a game" backgroundColor='#ffb366' style={{color: '#663300'}} /></Link >
-                                                <Link style={{ marginLeft: '5px' }} to='/joinGame'><FlatButton label="or join one?" backgroundColor='#ffb366' style={{color: '#663300'}} /></Link >
+                                                <Link style={{ marginLeft: '5px' }} to='/startGame'><FlatButton label="start a game" backgroundColor='#ffb366' style={{ color: '#663300', fontFamily: "'Montserrat', sans-serif" }} /></Link >
+                                                <Link style={{ marginLeft: '5px' }} to='/joinGame'><FlatButton label="or join one?" backgroundColor='#ffb366' style={{ color: '#663300', fontFamily: "'Montserrat', sans-serif" }} /></Link >
                                             </p>
                                         </Col>}
                                 </Row>

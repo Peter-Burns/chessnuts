@@ -5,8 +5,8 @@ import $ from 'jquery';
 import Chess from 'chess.js';
 import '../chessboard-0.3.0.css';
 import { withRouter } from 'react-router-dom';
-import LoginButton from '../components/LoginButton';
 import axios from 'axios';
+import FlatButton from 'material-ui/FlatButton/FlatButton';
 
 window.$ = $;
 window.jQuery = $;
@@ -17,10 +17,15 @@ class Game extends Component {
         pgn: null,
         gameOver: false,
         activeGames: null,
-        activeUsers: null
+        activeUsers: null,
+        gameHistory: null
     }
     login() {
         this.props.history.push('/login');
+    }
+    moveListLoader = (moveList) => {
+        this.state.game.load_pgn(moveList.join(' '));
+        this.state.board.position(this.state.game.fen());
     }
     componentDidMount() {
         axios.get('/api/games/numberofgames')
@@ -97,10 +102,11 @@ class Game extends Component {
                     status += ', ' + moveColor + ' is in check';
                 }
             }
-            stateUpdater(status, game.pgn(), game.game_over());
+
+            stateUpdater(status, game.pgn(), game.game_over(), game.history());
         }
-        const stateUpdater = (status, pgn, gameOver) => {
-            this.setState({ boardState: status, pgn: pgn, gameOver: gameOver });
+        const stateUpdater = (status, pgn, gameOver, gameHistory) => {
+            this.setState({ boardState: status, pgn: pgn, gameOver: gameOver, gameHistory: gameHistory });
         }
         const cfg = {
             draggable: true,
@@ -110,25 +116,39 @@ class Game extends Component {
             onSnapEnd: onSnapEnd
         };
         const board = ChessBoard('board', cfg);
+        this.setState({ board: board, game: game });
         $(window).resize(board.resize);
     }
     render() {
         return (
-            <Grid fluid>
+            <Grid style={{ color: '#663300' }} fluid>
                 <Row style={{ fontFamily: "'Montserrat', sans-serif" }} center="xs">
                     <Col lg={4} md={6} sm={9} xs={12}>
                         <h3>Welcome to Chessnuts!</h3>
+                        <p>Make an account to play, watch some of the top games going on below, or tinker around on the practice board</p>
+                        <h4>Highest ranked player is currently Pete321 with a 2500 rating</h4>
+                        <FlatButton backgroundColor='#ffb366' style={{ color: "#663300", fontFamily: "'Montserrat', sans-serif" }} label='See leaderboard' />
                         <p>{this.state.activeUsers} Active Users</p>
                         <p>{this.state.activeGames} Active Games</p>
+                        <h3>Top rated active games</h3>
                     </Col>
-                    <Col style={{}} lg={4} md={6} sm={9} xs={12}>
-                        <h3>Test your skills!</h3>
+                    <Col lg={3} md={6} sm={9} xs={12}>
+                        <h3>Test your skills on the practice board!</h3>
                         <div id="board" style={{ width: "100%" }}>
 
                         </div>
+                        <FlatButton label='Reset' backgroundColor='#ffb366' style={{ color: "#663300", fontFamily: "'Montserrat', sans-serif" }} onClick={() => this.moveListLoader([])} />
+                    </Col>
+                    <Col lg={1}>
                         <p>{this.state.boardState}</p>
-                        {this.state.gameOver ? <p> If you're looking for a new challenge, why not make an account? <LoginButton color="#663300" onClick={() => this.login()} /> </p> : ''}
-                        <p>{this.state.pgn}</p>
+                        {this.state.gameOver ? <p> If you're looking for a new challenge, why not make an account? <FlatButton label='Register' backgroundColor='#ffb366' style={{ color: "#663300", fontFamily: "'Montserrat', sans-serif" }} onClick={() => this.login()} /> </p> : ''}
+                        <Row>
+                            {this.state.gameHistory ? this.state.gameHistory.map((move, moveNumber, moveList) => (
+                                <Col key={moveNumber} xs={6}>
+                                    <FlatButton onClick={() => this.moveListLoader(moveList.slice(0, moveNumber + 1))}>{move}</FlatButton>
+                                </Col>
+                            )) : ''}
+                        </Row>
                     </Col>
                 </Row>
             </Grid>
