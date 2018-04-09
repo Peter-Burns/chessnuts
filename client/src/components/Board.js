@@ -7,6 +7,7 @@ import { pgnUpdater, postMove } from '../api';
 import axios from 'axios';
 import { withUser } from '../services/withUser';
 import FlatButton from 'material-ui/FlatButton';
+import { Row, Col } from 'react-flexbox-grid';
 
 window.$ = $;
 window.jQuery = $;
@@ -25,8 +26,8 @@ class Board extends Component {
         const gameId = this.props.gameId;
         axios.get('/api/games/' + gameId)
             .then(res => {
-                if (user.id === res.data.whitePlayer) this.setState({ userColor: 'w' });
-                if (user.id === res.data.blackPlayer) this.setState({ userColor: 'b' });
+                if (user && user.id === res.data.whitePlayer) this.setState({ userColor: 'w' });
+                if (user && user.id === res.data.blackPlayer) this.setState({ userColor: 'b' });
                 console.log(this.state.userColor);
                 game = new Chess();
                 game.load_pgn(res.data.pgn);
@@ -121,13 +122,25 @@ class Board extends Component {
     }
     render() {
         return (
-            <div>
-                <div id="board" style={{ width: "100%", marginBottom:'5px' }}>
+            <Row >
+                <Col lg={4} lgOffset={3} md={6} sm={9} xs={12}>
+                    <div id="board" style={{ width: "100%", marginBottom: '5px' }}>
 
-                </div>
-                <FlatButton label='Flip'hoverColor="#994d00" backgroundColor='#663300' style={{ color:'#fff3e6', marginRight:'10px'}} onClick={() => this.flipBoard()}/>
-                <FlatButton label='Resign'hoverColor="#994d00" backgroundColor='#663300' style={{ color:'#fff3e6'}} onClick={() => this.flipBoard()}/>
-            </div>
+                    </div>
+                    <FlatButton label='Flip' backgroundColor='#ffb366' style={{ color: "#663300", fontFamily: "'Montserrat', sans-serif", marginRight: '10px' }} onClick={() => this.flipBoard()} />
+                    <FlatButton label='Resign' hoverColor="#994d00" backgroundColor='#663300' style={{ color: '#fff3e6', fontFamily: "'Montserrat', sans-serif" }} onClick={() => this.flipBoard()} />
+                </Col>
+                <Col lg={2}>
+                    <Row center='xs'>
+                    <h4>Move List</h4>
+                        {this.state.gameHistory ? this.state.gameHistory.map((move, moveNumber, moveList) => (
+                            <Col key={moveNumber} xs={6}>
+                                <FlatButton onClick={() => this.moveListLoader(moveList.slice(0, moveNumber + 1))}>{move}</FlatButton>
+                            </Col>
+                        )) : ''}
+                    </Row>
+                </Col>
+            </Row>
         )
     }
 }

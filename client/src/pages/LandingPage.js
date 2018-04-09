@@ -155,7 +155,8 @@ class Game extends Component {
                     </Col>
                     <Col lg={2}>
                         <p>{this.state.boardState}</p>
-                        {this.state.gameOver ? <p> If you're looking for a new challenge, why not make an account? <FlatButton label='Register' backgroundColor='#ffb366' style={{ color: "#663300", fontFamily: "'Montserrat', sans-serif" }} onClick={() => this.login()} /> </p> : ''}
+                        {this.state.gameOver ? <p> If you're looking for a new challenge, why not make an account? <FlatButton label='Login/Register' backgroundColor='#ffb366' style={{ color: "#663300", fontFamily: "'Montserrat', sans-serif" }} onClick={() => this.login()} /> </p> : ''}
+                        <h4>Move List</h4>
                         <Row>
                             {this.state.gameHistory ? this.state.gameHistory.map((move, moveNumber, moveList) => (
                                 <Col key={moveNumber} xs={6}>
