@@ -6,6 +6,7 @@ import Chess from 'chess.js';
 import { pgnUpdater, postMove } from '../api';
 import axios from 'axios';
 import { withUser } from '../services/withUser';
+import FlatButton from 'material-ui/FlatButton';
 
 window.$ = $;
 window.jQuery = $;
@@ -111,7 +112,7 @@ class Board extends Component {
             removeGreySquares();
         };
 
-        function onSnapEnd () {
+        function onSnapEnd() {
             board.position(game.fen());
         };
     }
@@ -121,10 +122,11 @@ class Board extends Component {
     render() {
         return (
             <div>
-                <div id="board" style={{ width: "100%" }}>
+                <div id="board" style={{ width: "100%", marginBottom:'5px' }}>
 
                 </div>
-                <button onClick={() => this.flipBoard()}>Flip</button>
+                <FlatButton label='Flip'hoverColor="#994d00" backgroundColor='#663300' style={{ color:'#fff3e6', marginRight:'10px'}} onClick={() => this.flipBoard()}/>
+                <FlatButton label='Resign'hoverColor="#994d00" backgroundColor='#663300' style={{ color:'#fff3e6'}} onClick={() => this.flipBoard()}/>
             </div>
         )
     }

@@ -40,17 +40,21 @@ class StartGame extends Component {
                 <Row center="md">
                     <Col lg={4} md={6} sm={9} xs={12} >
                         <form onSubmit={(event) => this.createGame(event)}>
-                            <div id="board" style={{ width: '100%', maxWidth:'600px'}} />
+                            <div id="board" style={{ width: '100%', maxWidth: '600px' }} />
                             <div>
                                 <Toggle
                                     style={{ maxWidth: 250 }}
-                                    label={this.state.white ? 'White' : 'Black'}
+                                    // label={this.state.white ? 'White' : 'Black'}
                                     toggled={this.state.white}
+                                    thumbStyle={{ backgroundColor: 'black' }}
+                                    trackStyle={{ backgroundColor: 'gery' }}
+                                    thumbSwitchedStyle={{ backgroundColor: 'white' }}
+                                    trackSwitchedStyle={{ backgroundColor: 'grey' }}
                                     onToggle={(event, isChecked) => this.changeColor(event, isChecked)}
                                 />
                             </div>
                             <div>
-                                <FlatButton label='Create Game' type="submit">
+                                <FlatButton hoverColor="#994d00" backgroundColor='#663300' style={{ color: '#fff3e6' }} label='Create Game' type="submit">
                                 </FlatButton>
                             </div>
                         </form>

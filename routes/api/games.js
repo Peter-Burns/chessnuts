@@ -1,6 +1,9 @@
 const router = require("express").Router();
 const gameController = require("../../controllers/gameController");
 
+router.route("/numberofgames")
+  .get(gameController.numberOfGames);
+
 router.route("/join")
   .get(gameController.joinableGames);
   
@@ -12,7 +15,7 @@ router.route("/:id")
   .put(gameController.updateGame);
 
 router.route("/")
-  .get(gameController.findAll)
+  .get(gameController.findUserGames)
   .post(gameController.create);
 
 module.exports = router;

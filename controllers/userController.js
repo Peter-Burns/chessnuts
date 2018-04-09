@@ -2,11 +2,15 @@ const db = require("../models");
 const passport = require('passport');
 
 module.exports = {
+    numberOfUsers: function (req, res) {
+        db.User.find()
+            .then(dbModel=>res.json(dbModel.length))
+            .catch(err => res.status(422).json(err));
+    },
     create: function (req, res) {
         db.User.register(new db.User({ username: req.body.username }), req.body.password, function (err, user) {
-            console.log(err);
             if (err) {
-                return res.json('error registering user');
+                return res.status(422).json('error registering user');
             }
 
             passport.authenticate('local')(req, res, function () {
@@ -34,6 +38,6 @@ module.exports = {
                 message: 'You are not currently logged in.'
             });
         }
-        res.json({username: req.user.username, id:req.user._id});
+        res.json({ username: req.user.username, id: req.user._id });
     }
 };

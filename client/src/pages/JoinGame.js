@@ -4,6 +4,7 @@ import { ListItem } from 'material-ui/List';
 import axios from 'axios';
 import { withRouter, Link } from 'react-router-dom';
 import JoinButton from '../components/JoinButton';
+import FlatButton from 'material-ui/FlatButton';
 
 class JoinGame extends Component {
     state = {
@@ -27,7 +28,7 @@ class JoinGame extends Component {
             <Grid fluid>
                 <Row center="xs">
                     {!this.state.games[0] ?
-                        <p style={{ color: "#663300" }}> No joinable games, would you like to <Link to='/startGame'><button> start one?</button></Link ></p>
+                        <p style={{ color: "#663300" }}> No joinable games, would you like to <Link to='/startGame'><FlatButton label="start one?"hoverColor="#994d00" backgroundColor='#663300' style={{ color:'#fff3e6'}}/></Link ></p>
                         : this.state.games.map(game => (
                             <Col key={game._id} md={9} xs={12}>
                                 <ListItem>

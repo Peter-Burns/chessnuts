@@ -4,9 +4,9 @@ import ChessBoard from "chessboardjs";
 import $ from 'jquery';
 import Chess from 'chess.js';
 import '../chessboard-0.3.0.css';
-import { differenceInCalendarMonths } from 'date-fns';
 import { withRouter } from 'react-router-dom';
 import LoginButton from '../components/LoginButton';
+import axios from 'axios';
 
 window.$ = $;
 window.jQuery = $;
@@ -15,12 +15,20 @@ class Game extends Component {
     state = {
         boardState: null,
         pgn: null,
-        gameOver: false
+        gameOver: false,
+        activeGames: null,
+        activeUsers: null
     }
     login() {
         this.props.history.push('/login');
     }
     componentDidMount() {
+        axios.get('/api/games/numberofgames')
+            .then(res => this.setState({ activeGames: res.data }))
+            .catch(err => console.log(err));
+        axios.get('api/users/numberofusers')
+            .then(res => this.setState({ activeUsers: res.data }))
+            .catch(err => console.log(err));
         const game = new Chess();
         function onDragStart(source, piece, position, orientation) {
             if (game.in_checkmate() === true || game.in_draw() === true ||
@@ -110,8 +118,8 @@ class Game extends Component {
                 <Row style={{ fontFamily: "'Montserrat', sans-serif" }} center="xs">
                     <Col lg={4} md={6} sm={9} xs={12}>
                         <h3>Welcome to Chessnuts!</h3>
-                        <p>433 Active Users</p>
-                        <p>1254 Active Games</p>
+                        <p>{this.state.activeUsers} Active Users</p>
+                        <p>{this.state.activeGames} Active Games</p>
                     </Col>
                     <Col style={{}} lg={4} md={6} sm={9} xs={12}>
                         <h3>Test your skills!</h3>
@@ -119,7 +127,7 @@ class Game extends Component {
 
                         </div>
                         <p>{this.state.boardState}</p>
-                        {this.state.gameOver ? <p> If you're looking for a new challenge, why not make an account? <LoginButton onClick={()=>this.login()} /> </p> : ''}
+                        {this.state.gameOver ? <p> If you're looking for a new challenge, why not make an account? <LoginButton color="#663300" onClick={() => this.login()} /> </p> : ''}
                         <p>{this.state.pgn}</p>
                     </Col>
                 </Row>

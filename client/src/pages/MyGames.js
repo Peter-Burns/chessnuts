@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { Grid, Row, Col } from 'react-flexbox-grid';
-import { List, ListItem } from 'material-ui/List';
 import axios from 'axios';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import ChessBoard from "chessboardjs";
 import $ from 'jquery';
 import Chess from 'chess.js';
 import '../chessboard-0.3.0.css';
 import FlatButton from 'material-ui/FlatButton';
+import { Tabs, Tab } from 'material-ui/Tabs';
 
 window.$ = $;
 window.jQuery = $;
@@ -15,6 +15,9 @@ window.jQuery = $;
 class MyGames extends Component {
     state = {
         games: []
+    }
+    toggleViewGame(gameId) {
+        $('#' + gameId).toggle();
     }
     componentDidMount() {
         axios.get('/api/games')
@@ -27,31 +30,49 @@ class MyGames extends Component {
     gameLoad(PGN, gameId) {
         const game = new Chess();
         game.load_pgn(PGN);
-        const board = ChessBoard(gameId, game.fen());
+        const config = {
+            showNotation: false,
+            position: game.fen()
+        };
+        const board = ChessBoard(gameId, config);
         $(window).resize(board.resize);
     }
     render() {
         return (
-            <Grid fluid>
-                <Row center="xs">
-                    <Col lg={4} md={6} xs={12}>
-                        <List>
-                            {this.state.games.map(game => (
-                                <ListItem key={game._id} style={{ textAlign: 'center' }}>
-                                    <a href={'/game/' + game._id} style={{ color: '#663300', textDecorationLine: 'none' }}>
+            <Grid>
+                <Row>
+                    <Col xs={12}>
+                        <Tabs
+                            tabItemContainerStyle={{ background: "#663300" }}
+                            inkBarStyle={{ background: "#ffb366" }}>
+                            <Tab label='Current Games'>
+                                <Row>
+                                    {this.state.games.length ? this.state.games.map(game => (
+                                        <Col lg={3} md={4} xs={12} key={game._id} style={{ textAlign: 'center' }}>
+                                            <a href={'/game/' + game._id} style={{ color: '#663300', textDecorationLine: 'none' }}>
 
-                                        <span>Black: {game.blackPlayer ? game.blackPlayer.username: "No player yet"}</span>
-                                        <div id={game._id} style={{ width: '100%', maxWidth: '400px', margin: '0 auto' }} />
-                                        <span>White: {game.whitePlayer ? game.whitePlayer.username: "No player yet"} </span>
+                                                <p>Black: {game.blackPlayer ? game.blackPlayer.username : "No player yet"}</p>
+                                                <div id={game._id} hidden style={{ width: '100%', maxWidth: '200px', margin: '0 auto' }} />
+                                                <p>White: {game.whitePlayer ? game.whitePlayer.username : "No player yet"} </p>
 
-                                    </a>
-                                    <div>
-                                        <FlatButton hoverColor="#ffb366"style={{ color:'#663300'}} onClick={(event) => { this.gameLoad(game.pgn, game._id);     event.target.parentNode.remove(); }}>View game</FlatButton>
-                                    </div>
-                                </ListItem>
+                                            </a>
+                                            <div>
+                                                <FlatButton hoverColor="#994d00" backgroundColor='#663300' style={{ color: '#fff3e6' }} onClick={(event) => { this.gameLoad(game.pgn, game._id); this.toggleViewGame(game._id); }}>View game</FlatButton>
+                                            </div>
+                                        </Col>
 
-                            ))}
-                        </List>
+                                    )) : <Col xs={12} style={{ color: "#663300" }}>
+                                            <p>
+                                                No active games, would you like to
+                                                <Link style={{ marginLeft: '5px' }} to='/startGame'><FlatButton label="start a game" backgroundColor='#ffb366' style={{color: '#663300'}} /></Link >
+                                                <Link style={{ marginLeft: '5px' }} to='/joinGame'><FlatButton label="or join one?" backgroundColor='#ffb366' style={{color: '#663300'}} /></Link >
+                                            </p>
+                                        </Col>}
+                                </Row>
+                            </Tab>
+                            <Tab label="Past Games">
+                            </Tab>
+                        </Tabs>
                     </Col>
                 </Row>
             </Grid>
