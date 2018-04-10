@@ -161,8 +161,8 @@ class Game extends Component {
                     <Col lg={2}>
                         <p>{this.state.boardState}</p>
                         {this.state.gameOver ? <p> If you're looking for a new challenge, why not make an account? <FlatButton label='Login/Register' backgroundColor='#ffb366' style={{ color: "#663300", fontFamily: "'Montserrat', sans-serif" }} onClick={() => this.login()} /> </p> : ''}
-                        <h4>Move List</h4>
-                        <Row>
+                        {this.state.gameHistory ? <h4>Move List</h4> : ''}
+                        <Row style={{maxHeight:'300px', overflowY:'auto', overflowX:'hidden'}}>
                             {this.state.gameHistory ? this.state.gameHistory.map((move, moveNumber, moveList) => (
                                 <Col key={moveNumber} xs={6}>
                                     <FlatButton onClick={() => this.moveListLoader(moveList.slice(0, moveNumber + 1))}>{move}</FlatButton>

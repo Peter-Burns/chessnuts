@@ -180,7 +180,7 @@ class Board extends Component {
                 </Col>
                 <Col lg={2} md={6}>
                     <h4>Move List</h4>
-                    <Row>
+                    <Row style={{maxHeight:'400px', overflowY:'auto', overflowX:'hidden'}}>
                         {this.state.gameHistory ? this.state.gameHistory.map((move, moveNumber, moveList) => (
                             <Col key={moveNumber} xs={6}>
                                 <FlatButton onClick={() => this.moveListLoader(moveList.slice(0, moveNumber + 1))}>{move}</FlatButton>
