@@ -21,7 +21,8 @@ class Board extends Component {
         open: false,
         flipped: false,
         gameHistory: [],
-        pgn: null
+        pgn: null,
+        boardState: ''
     }
 
     moveListLoader = (moveList) => {
@@ -61,6 +62,7 @@ class Board extends Component {
                 this.setState({ game: game });
                 this.setState({ pgn: game.pgn() })
                 if (userColor === 'b') this.flipBoard();
+                updateStatus();
                 $(window).resize(board.resize);
             })
             .catch(err => console.log(err));
@@ -93,6 +95,7 @@ class Board extends Component {
             game.load_pgn(PGN);
             this.setState({ gameHistory: game.history() });
             board.position(game.fen());
+            updateStatus();
         });
         function removeGreySquares() {
             $('#board .square-55d63').css('background', '');
@@ -133,6 +136,36 @@ class Board extends Component {
         function onSnapEnd() {
             board.position(game.fen());
         };
+
+        const updateStatus = () => {
+            let status = '';
+
+            let moveColor = 'White';
+            if (game.turn() === 'b') {
+                moveColor = 'Black';
+            }
+
+            // checkmate?
+            if (game.in_checkmate() === true) {
+                status = 'Game over, ' + moveColor + ' is in checkmate.';
+            }
+
+            // draw?
+            else if (game.in_draw() === true) {
+                status = 'Game over, drawn position';
+            }
+
+            // game still on
+            else {
+                status = moveColor + ' to move';
+
+                // check?
+                if (game.in_check() === true) {
+                    status += ', ' + moveColor + ' is in check';
+                }
+            }
+            this.setState({ boardState: status })
+        }
     }
     flipBoard() {
         this.state.board.flip();
@@ -179,8 +212,9 @@ class Board extends Component {
                     </Dialog>
                 </Col>
                 <Col lg={2} md={6}>
+                    <h3>{this.state.boardState}</h3>
                     <h4>Move List</h4>
-                    <Row style={{maxHeight:'400px', overflowY:'auto', overflowX:'hidden'}}>
+                    <Row style={{ maxHeight: '400px', overflowY: 'auto', overflowX: 'hidden' }}>
                         {this.state.gameHistory ? this.state.gameHistory.map((move, moveNumber, moveList) => (
                             <Col key={moveNumber} xs={6}>
                                 <FlatButton onClick={() => this.moveListLoader(moveList.slice(0, moveNumber + 1))}>{move}</FlatButton>

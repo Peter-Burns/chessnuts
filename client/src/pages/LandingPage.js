@@ -13,7 +13,7 @@ window.jQuery = $;
 
 class Game extends Component {
     state = {
-        boardState: null,
+        boardState: '',
         pgn: null,
         gameOver: false,
         activeGames: null,
@@ -155,11 +155,11 @@ class Game extends Component {
                     </Col>
                     <Col lg={3} md={6} sm={9} xs={12}>
                         <h3>Test your skills on the practice board!</h3>
-                        <div id="board" style={{ width: "100%" }} />
+                        <div id="board" style={{ width: "100%" }} />                    
                         <FlatButton label='Reset' backgroundColor='#ffb366' style={{ color: "#663300", fontFamily: "'Montserrat', sans-serif" }} onClick={() => this.moveListLoader([])} />
                     </Col>
                     <Col lg={2}>
-                        <p>{this.state.boardState}</p>
+                        <h3>{this.state.boardState}</h3>
                         {this.state.gameOver ? <p> If you're looking for a new challenge, why not make an account? <FlatButton label='Login/Register' backgroundColor='#ffb366' style={{ color: "#663300", fontFamily: "'Montserrat', sans-serif" }} onClick={() => this.login()} /> </p> : ''}
                         {this.state.gameHistory ? <h4>Move List</h4> : ''}
                         <Row style={{maxHeight:'300px', overflowY:'auto', overflowX:'hidden'}}>
