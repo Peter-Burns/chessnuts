@@ -116,12 +116,17 @@ class Game extends Component {
             onSnapEnd: onSnapEnd
         };
         const board = ChessBoard('board', cfg);
-        const topCfg = {
-            position: 'start',
+        const oneCfg = {
+            position: 'r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R',
             showNotation: false
         }
-        const board1 = ChessBoard('board1', topCfg);
-        const board2 = ChessBoard('board2', topCfg);
+        const twoCfg = {
+            position: 'r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R',
+            showNotation: false,
+            orientation:'black'
+        }
+        const board1 = ChessBoard('board1', oneCfg);
+        const board2 = ChessBoard('board2', twoCfg);
         this.setState({ board: board, game: game });
         $(window).resize(board.resize);
         $(window).resize(board1.resize);

@@ -28,6 +28,8 @@ module.exports = {
     findGame: function (req, res) {
         db.Game
             .findOne({ _id: req.params.id })
+            .populate('whitePlayer')
+            .populate('blackPlayer')
             .then(game => res.json(game))
             .catch(err => res.status(422).json(err));
     },

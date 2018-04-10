@@ -8,6 +8,7 @@ import axios from 'axios';
 import { withUser } from '../services/withUser';
 import FlatButton from 'material-ui/FlatButton';
 import { Row, Col } from 'react-flexbox-grid';
+import Dialog from 'material-ui/Dialog';
 
 window.$ = $;
 window.jQuery = $;
@@ -15,8 +16,19 @@ window.jQuery = $;
 class Board extends Component {
     state = {
         board: '',
-        userColor: ''
+        game: null,
+        userColor: '',
+        open: false,
+        flipped: false,
+        gameHistory: [],
+        pgn: null
     }
+
+    moveListLoader = (moveList) => {
+        this.state.game.load_pgn(moveList.join(' '));
+        this.state.board.position(this.state.game.fen());
+    }
+
     componentDidMount() {
         let config;
         let board;
@@ -26,11 +38,13 @@ class Board extends Component {
         const gameId = this.props.gameId;
         axios.get('/api/games/' + gameId)
             .then(res => {
-                if (user && user.id === res.data.whitePlayer) this.setState({ userColor: 'w' });
-                if (user && user.id === res.data.blackPlayer) this.setState({ userColor: 'b' });
-                console.log(this.state.userColor);
+                this.setState({ whitePlayer: res.data.whitePlayer ? res.data.whitePlayer.username : null });
+                this.setState({ blackPlayer: res.data.blackPlayer ? res.data.blackPlayer.username : null });
+                if (user && res.data.whitePlayer && user.id === res.data.whitePlayer._id) this.setState({ userColor: 'w' });
+                if (user && res.data.blackPlayer && user.id === res.data.blackPlayer._id) this.setState({ userColor: 'b' });
                 game = new Chess();
                 game.load_pgn(res.data.pgn);
+                this.setState({ gameHistory: game.history() });
                 config = {
                     position: game.fen(),
                     orientation: 'white',
@@ -44,12 +58,15 @@ class Board extends Component {
                 board = ChessBoard('board', config);
                 userColor = this.state.userColor;
                 this.setState({ board: board });
+                this.setState({ game: game });
+                this.setState({ pgn: game.pgn() })
                 if (userColor === 'b') this.flipBoard();
                 $(window).resize(board.resize);
             })
             .catch(err => console.log(err));
 
-        function onDrop(source, target) {
+        const onDrop = (source, target) => {
+            if (game.pgn() !== this.state.pgn) return 'snapback';
             removeGreySquares();
             const move = game.move({
                 from: source,
@@ -62,7 +79,6 @@ class Board extends Component {
         }
 
         function onDragStart(source, piece, position, orientation) {
-            console.log(userColor);
             if (game.game_over() === true ||
                 (game.turn() === 'w' && piece.search(/^b/) !== -1) ||
                 (game.turn() === 'b' && piece.search(/^w/) !== -1) ||
@@ -73,8 +89,9 @@ class Board extends Component {
         };
 
         pgnUpdater((err, PGN) => {
-            console.log(PGN);
+            this.setState({ pgn: PGN });
             game.load_pgn(PGN);
+            this.setState({ gameHistory: game.history() });
             board.position(game.fen());
         });
         function removeGreySquares() {
@@ -119,20 +136,51 @@ class Board extends Component {
     }
     flipBoard() {
         this.state.board.flip();
+        this.setState({ flipped: !this.state.flipped })
     }
+
+    handleOpen = () => {
+        this.setState({ open: true });
+    };
+
+    handleClose = () => {
+        this.setState({ open: false });
+    };
+
     render() {
+        const actions = [
+            <FlatButton
+                label="Cancel"
+                onClick={this.handleClose}
+            />,
+            <FlatButton
+                label="Resign"
+                onClick={this.handleClose}
+            />,
+        ];
+
         return (
-            <Row >
-                <Col lg={4} lgOffset={3} md={6} sm={9} xs={12}>
+            <Row center="xs">
+                <Col lg={4} md={6} sm={9} xs={12}>
+                    <p>{this.state.flipped ? this.state.whitePlayer : this.state.blackPlayer}</p>
                     <div id="board" style={{ width: "100%", marginBottom: '5px' }}>
 
                     </div>
+                    <p>{this.state.flipped ? this.state.blackPlayer : this.state.whitePlayer}</p>
                     <FlatButton label='Flip' backgroundColor='#ffb366' style={{ color: "#663300", fontFamily: "'Montserrat', sans-serif", marginRight: '10px' }} onClick={() => this.flipBoard()} />
-                    <FlatButton label='Resign' hoverColor="#994d00" backgroundColor='#663300' style={{ color: '#fff3e6', fontFamily: "'Montserrat', sans-serif" }} onClick={() => this.flipBoard()} />
+                    <FlatButton label='Resign' hoverColor="#994d00" backgroundColor='#663300' style={{ color: '#fff3e6', fontFamily: "'Montserrat', sans-serif" }} onClick={() => this.handleOpen()} />
+                    <Dialog
+                        title="Resign Game"
+                        actions={actions}
+                        onRequestClose={this.handleClose}
+                        open={this.state.open}
+                    >
+                        Are you sure?
+                    </Dialog>
                 </Col>
-                <Col lg={2}>
-                    <Row center='xs'>
+                <Col lg={2} md={6}>
                     <h4>Move List</h4>
+                    <Row>
                         {this.state.gameHistory ? this.state.gameHistory.map((move, moveNumber, moveList) => (
                             <Col key={moveNumber} xs={6}>
                                 <FlatButton onClick={() => this.moveListLoader(moveList.slice(0, moveNumber + 1))}>{move}</FlatButton>

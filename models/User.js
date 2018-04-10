@@ -11,7 +11,11 @@ const UserSchema = new Schema({
     unique: true,
     required: true
   },
-  
+  rating: {
+    type: Number,
+    default: 1200
+  }
+
 });
 
 UserSchema.plugin(passportLocalMongoose);
