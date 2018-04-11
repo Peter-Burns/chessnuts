@@ -13,10 +13,12 @@ import { withUser, update } from './services/withUser';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import axios from 'axios';
 import StartGame from "./pages/StartGame";
-
+import Drawer from 'material-ui/Drawer';
 
 class App extends Component {
-
+  state = {
+    open: true
+  }
   componentDidMount() {
     // this is going to double check that the user is still actually logged in
     // if the app is reloaded. it's possible that we still have a user in sessionStorage
@@ -49,6 +51,14 @@ class App extends Component {
               <PrivateRoute exact path="/startgame" component={StartGame} />
               <Route exact path="/login" component={Login} />
             </Switch>
+            <Drawer 
+            containerStyle={{background:'#fff3e6'}}
+            docked={false}
+            width={200} 
+            openSecondary={true} 
+            onRequestChange={(open) => this.setState({open})}
+            open={this.state.open} >
+            </Drawer>
           </Fragment>
         </MuiThemeProvider>
       </Router>

@@ -38,7 +38,7 @@ const Navbar = (props) => {
     }
     const { user } = props;
     return (
-        <AppBar title="Chessnuts"
+        <AppBar title={<div>Chessnuts</div>}
             className="chessNav"
             onTitleClick={goHome}
             showMenuIconButton={true}
