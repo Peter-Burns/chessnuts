@@ -30,7 +30,7 @@ const GameSchema = new Schema({
     },
     turn: {
         type: String,
-        default:'White'
+        default:'w'
     }
 });
 

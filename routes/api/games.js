@@ -4,6 +4,10 @@ const gameController = require("../../controllers/gameController");
 router.route("/numberofgames")
   .get(gameController.numberOfGames);
 
+router.route("/yourturngames")
+  .get(gameController.yourTurnGames);
+
+
 router.route("/join")
   .get(gameController.joinableGames);
   

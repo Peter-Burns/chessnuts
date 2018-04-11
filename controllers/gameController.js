@@ -1,6 +1,12 @@
 const db = require("../models");
 
 module.exports = {
+    yourTurnGames: function (req, res) {
+        db.Game
+            .find({ $or: [{ $and: [{ turn: 'b' }, { blackPlayer: req.user.id }] },{ $and: [{ turn: 'w' }, { whitePlayer: req.user.id }] }] })
+            .then(dbModel => res.json(dbModel))
+            .catch(err => console.log(err));
+    },
     numberOfGames: function (req, res) {
         db.Game
             .find()
@@ -35,7 +41,7 @@ module.exports = {
     },
     updateGame: function (req, res) {
         db.Game
-            .findOneAndUpdate({ _id: req.params.id }, { pgn: req.body.pgn }, { new: true })
+            .findOneAndUpdate({ _id: req.params.id }, { pgn: req.body.pgn, turn: req.body.turn }, { new: true })
             .then(game => res.json(game))
             .catch(err => res.status(422).json(err));
     },

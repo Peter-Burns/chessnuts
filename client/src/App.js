@@ -16,10 +16,13 @@ import StartGame from "./pages/StartGame";
 import Drawer from 'material-ui/Drawer';
 import Avatar from 'material-ui/Avatar';
 import { List, ListItem } from 'material-ui/List';
+import Badge from 'material-ui/Badge';
+
 
 class App extends Component {
   state = {
     open: false,
+    yourTurnGames: 0
   }
   componentDidMount() {
     // this is going to double check that the user is still actually logged in
@@ -30,6 +33,9 @@ class App extends Component {
         // if we get here, the user's session is still good. we'll update the user
         // to make sure we're using the most recent values just in case
         update(res.data);
+        axios.get('/api/games/yourturngames')
+          .then(res=> this.setState({yourTurnGames:res.data.length}))
+          .catch(err=>console.log(err));
       })
       .catch(err => {
         // if we get a 401 response, that means the user is no longer logged in
@@ -86,7 +92,10 @@ class App extends Component {
                     backgroundColor={'#ffb366'}
                   >{user.username.slice(0, 1)}</Avatar>}
                   initiallyOpen={true}
-                  nestedItems={[<Link style={{ textDecoration: 'none' }} to={'/mygames'}><ListItem style={{ color: '#663300' }}>My Games</ListItem></Link>,
+                  nestedItems={[<Link style={{ textDecoration: 'none' }} to={'/mygames'}><ListItem style={{ color: '#663300' }}>{this.state.yourTurnGames ? <Badge
+                    badgeContent={this.state.yourTurnGames}
+                    primary={true}
+                  >My Games</Badge> : 'My Games'}</ListItem></Link>,
                   <Link style={{ textDecoration: 'none' }} to={'startgame'}><ListItem style={{ color: '#663300' }}>Start or join game</ListItem></Link>,
                   <ListItem innerDivStyle={{ marginLeft: '0px' }} onClick={logout} style={{ color: '#663300' }}>Logout</ListItem>]}>
                 </ ListItem>

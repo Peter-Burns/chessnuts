@@ -56,7 +56,7 @@ io.on('connection', (client) => {
   client.join(room);
   console.log('Client joined room: ' + room);
   client.on('disconnect', function() {
-    client.leave(room)
+    client.leave(room);
     console.log('user disconnected');
   });
 
@@ -74,7 +74,8 @@ io.on('connection', (client) => {
         if (move) {
           io.to(room).emit('sendPGN', game.pgn());
           axios.put((live ? 'https://chessnuts.herokuapp.com' : 'http://localhost:3001') + '/api/games/' + gameId, {
-            pgn: game.pgn()
+            pgn: game.pgn(),
+            turn: game.turn()
           });
         }
         else client.emit('sendPGN', 'Invalid move');
