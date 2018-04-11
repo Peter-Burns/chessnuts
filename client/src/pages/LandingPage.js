@@ -18,7 +18,8 @@ class Game extends Component {
         gameOver: false,
         activeGames: null,
         activeUsers: null,
-        gameHistory: null
+        gameHistory: null,
+        highestRated: null
     }
     login() {
         this.props.history.push('/login');
@@ -28,9 +29,16 @@ class Game extends Component {
         this.state.board.position(this.state.game.fen());
     }
     componentDidMount() {
+        axios.get('/api/users/highestrated')
+            .then(res => {
+                this.setState({ highestRated: res.data[0] });
+            })
+            .catch(err => console.log(err));
+
         axios.get('/api/games/numberofgames')
             .then(res => this.setState({ activeGames: res.data }))
             .catch(err => console.log(err));
+
         axios.get('api/users/numberofusers')
             .then(res => this.setState({ activeUsers: res.data }))
             .catch(err => console.log(err));
@@ -123,7 +131,7 @@ class Game extends Component {
         const twoCfg = {
             position: 'r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R',
             showNotation: false,
-            orientation:'black'
+            orientation: 'black'
         }
         const board1 = ChessBoard('board1', oneCfg);
         const board2 = ChessBoard('board2', twoCfg);
@@ -133,10 +141,11 @@ class Game extends Component {
         $(window).resize(board2.resize);
     }
     render() {
+        const { highestRated } = this.state;
         return (
             <Grid style={{ color: '#663300' }} fluid>
                 <Row style={{ fontFamily: "'Montserrat', sans-serif" }} center="xs">
-                    <Col lg={4} lgOffset={2}md={6} sm={9} xs={12}>
+                    <Col lg={4} lgOffset={2} md={6} sm={9} xs={12}>
                         <h3>Welcome to Chessnuts!</h3>
                         <p>Make an account to play, watch some of the top games going on below, or tinker around on the practice board</p>
                         <h3>Top rated active games</h3>
@@ -148,21 +157,21 @@ class Game extends Component {
                                 <div id='board2' style={{ width: '100%' }} />
                             </Col>
                         </Row>
-                        <h4>Highest ranked player is currently Pete321 with a 2500 rating</h4>
+                        <h4>Highest ranked player is currently {highestRated ? highestRated.username : ''} with a {highestRated ? highestRated.rating : ''} rating</h4>
                         <FlatButton backgroundColor='#ffb366' style={{ color: "#663300", fontFamily: "'Montserrat', sans-serif" }} label='See leaderboard' />
                         <p>{this.state.activeUsers} Active Users</p>
                         <p>{this.state.activeGames} Active Games</p>
                     </Col>
                     <Col lg={3} md={6} sm={9} xs={12}>
                         <h3>Test your skills on the practice board!</h3>
-                        <div id="board" style={{ width: "100%" }} />                    
+                        <div id="board" style={{ width: "100%" }} />
                         <FlatButton label='Reset' backgroundColor='#ffb366' style={{ color: "#663300", fontFamily: "'Montserrat', sans-serif" }} onClick={() => this.moveListLoader([])} />
                     </Col>
                     <Col lg={2}>
                         <h3>{this.state.boardState}</h3>
                         {this.state.gameOver ? <p> If you're looking for a new challenge, why not make an account? <FlatButton label='Login/Register' backgroundColor='#ffb366' style={{ color: "#663300", fontFamily: "'Montserrat', sans-serif" }} onClick={() => this.login()} /> </p> : ''}
                         {this.state.gameHistory ? <h4>Move List</h4> : ''}
-                        <Row style={{maxHeight:'300px', overflowY:'auto', overflowX:'hidden'}}>
+                        <Row style={{ maxHeight: '300px', overflowY: 'auto', overflowX: 'hidden' }}>
                             {this.state.gameHistory ? this.state.gameHistory.map((move, moveNumber, moveList) => (
                                 <Col key={moveNumber} xs={6}>
                                     <FlatButton onClick={() => this.moveListLoader(moveList.slice(0, moveNumber + 1))}>{move}</FlatButton>

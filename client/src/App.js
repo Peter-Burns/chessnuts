@@ -10,14 +10,16 @@ import MyGames from './pages/MyGames';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { withUser, update } from './services/withUser';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
 import axios from 'axios';
 import StartGame from "./pages/StartGame";
 import Drawer from 'material-ui/Drawer';
+import Avatar from 'material-ui/Avatar';
+import { List, ListItem } from 'material-ui/List';
 
 class App extends Component {
   state = {
-    open: true
+    open: false,
   }
   componentDidMount() {
     // this is going to double check that the user is still actually logged in
@@ -38,11 +40,27 @@ class App extends Component {
   }
   render() {
     const { user } = this.props;
+
+    const logout = () => {
+      axios.delete('/api/users')
+        .then(() => {
+          update(null);
+          this.setState({ open: false });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+
+    const openNav = () => {
+      this.setState({ open: true });
+    }
+
     return (
       <Router>
         <MuiThemeProvider muiTheme={getMuiTheme()}>
           <Fragment>
-            <Navbar user={user} />
+            <Navbar user={user} openNav={openNav} />
             <Switch>
               <Route exact path="/" component={LandingPage} />
               <Route path="/game/:id" component={Game} />
@@ -51,13 +69,30 @@ class App extends Component {
               <PrivateRoute exact path="/startgame" component={StartGame} />
               <Route exact path="/login" component={Login} />
             </Switch>
-            <Drawer 
-            containerStyle={{background:'#fff3e6'}}
-            docked={false}
-            width={200} 
-            openSecondary={true} 
-            onRequestChange={(open) => this.setState({open})}
-            open={this.state.open} >
+            <Drawer
+              containerStyle={{ background: '#fff3e6' }}
+              docked={false}
+              width={200}
+              openSecondary={true}
+              onRequestChange={(open) => this.setState({ open })}
+              open={this.state.open} >
+              {user ? <List>
+                <ListItem
+                  style={{ color: '#663300' }}
+                  autoGenerateNestedIndicator={false}
+                  primaryText={<span style={{ fontWeight: '600' }}>{user.username}</span>}
+                  leftAvatar={<Avatar
+                    color={'#663300'}
+                    backgroundColor={'#ffb366'}
+                  >{user.username.slice(0, 1)}</Avatar>}
+                  initiallyOpen={true}
+                  nestedItems={[<Link style={{ textDecoration: 'none' }} to={'/mygames'}><ListItem style={{ color: '#663300' }}>My Games</ListItem></Link>,
+                  <Link style={{ textDecoration: 'none' }} to={'startgame'}><ListItem style={{ color: '#663300' }}>Start or join game</ListItem></Link>,
+                  <ListItem innerDivStyle={{ marginLeft: '0px' }} onClick={logout} style={{ color: '#663300' }}>Logout</ListItem>]}>
+                </ ListItem>
+
+              </List> : ''}
+
             </Drawer>
           </Fragment>
         </MuiThemeProvider>

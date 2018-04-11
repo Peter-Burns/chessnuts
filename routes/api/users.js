@@ -4,6 +4,9 @@ const userController = require("../../controllers/userController");
 router.route("/numberofusers")
     .get(userController.numberOfUsers);
 
+router.route("/highestrated")
+    .get(userController.highestRated);
+
 router.route("/")
     .post(userController.create)
     .delete(userController.logout)
