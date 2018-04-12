@@ -17,7 +17,7 @@ import Drawer from 'material-ui/Drawer';
 import Avatar from 'material-ui/Avatar';
 import { List, ListItem } from 'material-ui/List';
 import Badge from 'material-ui/Badge';
-
+import LoginButton from './components/LoginButton';
 
 class App extends Component {
   state = {
@@ -100,7 +100,7 @@ class App extends Component {
                   <ListItem innerDivStyle={{ marginLeft: '0px' }} onClick={logout} style={{ color: '#663300' }}>Logout</ListItem>]}>
                 </ ListItem>
 
-              </List> : ''}
+              </List> : <Link to="/login"><LoginButton color='#ffb366'/></Link>}
 
             </Drawer>
           </Fragment>
