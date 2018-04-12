@@ -97,6 +97,7 @@ class Board extends Component {
             board.position(game.fen());
             updateStatus();
         });
+        
         function removeGreySquares() {
             $('#board .square-55d63').css('background', '');
         };

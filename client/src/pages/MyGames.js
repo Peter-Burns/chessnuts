@@ -8,6 +8,7 @@ import Chess from 'chess.js';
 import '../chessboard-0.3.0.css';
 import FlatButton from 'material-ui/FlatButton';
 import { Tabs, Tab } from 'material-ui/Tabs';
+import FontIcon from 'material-ui/FontIcon';
 
 window.$ = $;
 window.jQuery = $;
@@ -51,13 +52,13 @@ class MyGames extends Component {
                                         <Col lg={3} md={4} xs={12} key={game._id} style={{ textAlign: 'center' }}>
                                             <a href={'/game/' + game._id} style={{ color: '#663300', textDecorationLine: 'none' }}>
 
-                                                <p>Black: {game.blackPlayer ? game.blackPlayer.username : "No player yet"}</p>
+                                                <p>{game.turn === 'b' && game.blackPlayer && (game.blackPlayer._id === this.props.user.id) ? <FontIcon className="material-icons">label</FontIcon> : ''}Black: {game.blackPlayer ? (game.blackPlayer._id === this.props.user.id ? <span style={{fontWeight:'600'}}>{game.blackPlayer.username}</span>:game.blackPlayer.username ) : "No player yet"}</p>
                                                 <div id={game._id} hidden style={{ width: '100%', maxWidth: '200px', margin: '0 auto' }} />
-                                                <p>White: {game.whitePlayer ? game.whitePlayer.username : "No player yet"} </p>
+                                                <p>{game.turn === 'w' && game.whitePlayer && (game.whitePlayer._id === this.props.user.id)? <FontIcon className="material-icons">label_outline</FontIcon> : ''}White: {game.whitePlayer ? game.whitePlayer.username : "No player yet"} </p>
 
                                             </a>
                                             <div>
-                                                <FlatButton hoverColor="#ffa64d" backgroundColor='#ffb366' label="View Game" style={{ color:'#663300',fontFamily: "'Montserrat', sans-serif" }} onClick={(event) => { this.gameLoad(game.pgn, game._id); this.toggleViewGame(game._id); }} />
+                                                <FlatButton hoverColor="#ffa64d" backgroundColor='#ffb366' label="View Game" style={{ color: '#663300', fontFamily: "'Montserrat', sans-serif" }} onClick={(event) => { this.gameLoad(game.pgn, game._id); this.toggleViewGame(game._id); }} />
                                             </div>
                                         </Col>
 
