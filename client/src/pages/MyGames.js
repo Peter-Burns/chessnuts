@@ -88,9 +88,9 @@ class MyGames extends Component {
                                         <Col lg={3} md={4} xs={12} key={game._id} style={{ textAlign: 'center' }}>
                                             <a href={'/game/' + game._id} style={{ color: '#663300', textDecorationLine: 'none' }}>
 
-                                                <p>{game.turn === 'b' && game.blackPlayer && (game.blackPlayer._id === this.props.user.id) ? <FontIcon className="material-icons">label</FontIcon> : ''}Black: {game.blackPlayer ? (game.blackPlayer._id === this.props.user.id ? <span style={{ fontWeight: '600' }}>{game.blackPlayer.username}</span> : game.blackPlayer.username) : "No player yet"}</p>
+                                                <p>{game.turn === 'w' ? <FontIcon className="material-icons">label</FontIcon> : ''}Black: {game.blackPlayer ? (game.blackPlayer._id === this.props.user.id ? <span style={{ fontWeight: '600' }}>{game.blackPlayer.username}</span> : game.blackPlayer.username) : "No player yet"}</p>
                                                 <div id={game._id} hidden style={{ width: '100%', maxWidth: '200px', margin: '0 auto' }} />
-                                                <p>{game.turn === 'w' && game.whitePlayer && (game.whitePlayer._id === this.props.user.id) ? <FontIcon className="material-icons">label_outline</FontIcon> : ''}White: {game.whitePlayer ? (game.whitePlayer._id === this.props.user.id ? <span style={{ fontWeight: '600' }}>{game.whitePlayer.username}</span> : game.whitePlayer.username) : "No player yet"} </p>
+                                                <p>{game.turn === 'b' ? <FontIcon className="material-icons">label_outline</FontIcon> : ''}White: {game.whitePlayer ? (game.whitePlayer._id === this.props.user.id ? <span style={{ fontWeight: '600' }}>{game.whitePlayer.username}</span> : game.whitePlayer.username) : "No player yet"} </p>
 
                                             </a>
                                             <div>
