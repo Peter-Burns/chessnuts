@@ -180,7 +180,10 @@ class Board extends Component {
     handleClose = () => {
         this.setState({ open: false });
     };
-
+    resignGame = () => {
+        console.log('you resigned');
+        this.handleClose();
+    }
     render() {
         const actions = [
             <FlatButton
@@ -189,7 +192,7 @@ class Board extends Component {
             />,
             <FlatButton
                 label="Resign"
-                onClick={this.handleClose}
+                onClick={this.resignGame}
             />,
         ];
 

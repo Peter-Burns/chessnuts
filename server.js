@@ -55,7 +55,7 @@ io.on('connection', (client) => {
   const room = client.handshake.headers.referer.split('/').pop();
   client.join(room);
   console.log('Client joined room: ' + room);
-  client.on('disconnect', function() {
+  client.on('disconnect', function () {
     client.leave(room);
     console.log('user disconnected');
   });
@@ -73,9 +73,17 @@ io.on('connection', (client) => {
         });
         if (move) {
           io.to(room).emit('sendPGN', game.pgn());
+          let result = false;
+          if (game.game_over()) {
+            if (game.in_draw()) result = '1/2 - 1/2';
+            else if (game.turn() === 'b') result = '1 - 0';
+            else result = '0 - 1';
+          }
           axios.put((live ? 'https://chessnuts.herokuapp.com' : 'http://localhost:3001') + '/api/games/' + gameId, {
             pgn: game.pgn(),
-            turn: game.turn()
+            turn: game.turn(),
+            result: result,
+            gameover:game.game_over()
           });
         }
         else client.emit('sendPGN', 'Invalid move');

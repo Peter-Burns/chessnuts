@@ -3,7 +3,9 @@ const db = require("../models");
 module.exports = {
     yourTurnGames: function (req, res) {
         db.Game
-            .find({ $or: [{ $and: [{ turn: 'b' }, { blackPlayer: req.user.id }] },{ $and: [{ turn: 'w' }, { whitePlayer: req.user.id }] }] })
+            .find({
+                $or: [{ $and: [{ turn: 'b' }, { blackPlayer: req.user.id }, { result: false }] }, { $and: [{ turn: 'w' }, { whitePlayer: req.user.id }, { result: false }] }]
+            })
             .then(dbModel => res.json(dbModel))
             .catch(err => console.log(err));
     },
@@ -16,7 +18,19 @@ module.exports = {
     findUserGames: function (req, res) {
         db.Game
             .find({
-                $and: [{ result: null },
+                $and: [{ result: false },
+                { $or: [{ whitePlayer: req.user.id }, { blackPlayer: req.user.id }] }]
+            })
+            .sort({ _id: -1 })
+            .populate('whitePlayer')
+            .populate('blackPlayer')
+            .then(dbModel => res.json(dbModel))
+            .catch(err => res.status(422).json(err));
+    },
+    findPastUserGames: function (req, res) {
+        db.Game
+            .find({
+                $and: [{ gameover: true },
                 { $or: [{ whitePlayer: req.user.id }, { blackPlayer: req.user.id }] }]
             })
             .sort({ _id: -1 })
@@ -41,7 +55,7 @@ module.exports = {
     },
     updateGame: function (req, res) {
         db.Game
-            .findOneAndUpdate({ _id: req.params.id }, { pgn: req.body.pgn, turn: req.body.turn }, { new: true })
+            .findOneAndUpdate({ _id: req.params.id }, { pgn: req.body.pgn, turn: req.body.turn, result: req.body.result, gameover:req.body.gameover }, { new: true })
             .then(game => res.json(game))
             .catch(err => res.status(422).json(err));
     },

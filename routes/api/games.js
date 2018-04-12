@@ -7,12 +7,14 @@ router.route("/numberofgames")
 router.route("/yourturngames")
   .get(gameController.yourTurnGames);
 
+router.route("/pastusergames")
+  .get(gameController.findPastUserGames);
 
 router.route("/join")
   .get(gameController.joinableGames);
-  
+
 router.route("/join/:id")
-.put(gameController.joinGame);
+  .put(gameController.joinGame);
 
 router.route("/:id")
   .get(gameController.findGame)

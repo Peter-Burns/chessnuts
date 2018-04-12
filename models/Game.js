@@ -26,7 +26,7 @@ const GameSchema = new Schema({
     },
     result:{
         type:String,
-        default:null
+        default:false
     },
     turn: {
         type: String,
