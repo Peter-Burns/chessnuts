@@ -53,6 +53,12 @@ module.exports = {
             .then(game => res.json(game))
             .catch(err => res.status(422).json(err));
     },
+    resignGame: function (req, res) {
+        db.Game
+            .findOneAndUpdate({ _id: req.params.id }, { turn: req.body.turn, result: req.body.result, gameover:req.body.gameover }, { new: true })
+            .then(game => res.json(game))
+            .catch(err => res.status(422).json(err));
+    },
     updateGame: function (req, res) {
         db.Game
             .findOneAndUpdate({ _id: req.params.id }, { pgn: req.body.pgn, turn: req.body.turn, result: req.body.result, gameover:req.body.gameover }, { new: true })

@@ -97,7 +97,7 @@ class Board extends Component {
             board.position(game.fen());
             updateStatus();
         });
-        
+
         function removeGreySquares() {
             $('#board .square-55d63').css('background', '');
         };
@@ -182,6 +182,13 @@ class Board extends Component {
     };
     resignGame = () => {
         console.log('you resigned');
+        axios.post('/api/games/resigngame/' + this.props.gameId, {
+            turn: this.state.userColor,
+            gameover: 'true',
+            result: this.state.userColor === 'b' ? '1 - 0' : '0 - 1'
+        })
+            .then(res =>this.setState({boardState:'Game Over ' + (this.state.userColor === 'b' ? 'Black' : 'White') + ' Resigned'}))
+            .catch(err => console.log(err));
         this.handleClose();
     }
     render() {

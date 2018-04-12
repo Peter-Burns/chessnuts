@@ -4,6 +4,9 @@ const gameController = require("../../controllers/gameController");
 router.route("/numberofgames")
   .get(gameController.numberOfGames);
 
+router.route("/resigngame/:id")
+  .post(gameController.resignGame);
+
 router.route("/yourturngames")
   .get(gameController.yourTurnGames);
 
