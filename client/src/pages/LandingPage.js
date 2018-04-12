@@ -21,6 +21,11 @@ class Game extends Component {
         gameHistory: null,
         highestRated: null
     }
+
+    leaderboard() {
+        this.props.history.push('/leaderboard');
+    }
+
     login() {
         this.props.history.push('/login');
     }
@@ -158,7 +163,7 @@ class Game extends Component {
                             </Col>
                         </Row>
                         <h4>Highest ranked player is currently {highestRated ? highestRated.username : ''} with a {highestRated ? highestRated.rating : ''} rating</h4>
-                        <FlatButton backgroundColor='#ffb366' style={{ color: "#663300", fontFamily: "'Montserrat', sans-serif" }} label='See leaderboard' />
+                        <FlatButton backgroundColor='#ffb366' style={{ color: "#663300", fontFamily: "'Montserrat', sans-serif" }} onClick={()=>this.leaderboard()} label='See leaderboard' />
                         <p>{this.state.activeUsers} Active Users</p>
                         <p>{this.state.activeGames} Active Games</p>
                     </Col>

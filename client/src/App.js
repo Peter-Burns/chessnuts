@@ -18,6 +18,7 @@ import Avatar from 'material-ui/Avatar';
 import { List, ListItem } from 'material-ui/List';
 import Badge from 'material-ui/Badge';
 import LoginButton from './components/LoginButton';
+import Leaderboard from "./pages/Leaderboard";
 
 class App extends Component {
   state = {
@@ -69,6 +70,7 @@ class App extends Component {
             <Navbar user={user} openNav={openNav} />
             <Switch>
               <Route exact path="/" component={LandingPage} />
+              <Route exact path="/leaderboard" component={Leaderboard} />
               <Route path="/game/:id" component={Game} />
               <PrivateRoute exact path="/mygames" component={MyGames} />
               <PrivateRoute exact path="/joingame" component={JoinGame} />

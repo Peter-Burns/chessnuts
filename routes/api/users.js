@@ -6,6 +6,8 @@ router.route("/numberofusers")
 
 router.route("/highestrated")
     .get(userController.highestRated);
+router.route("/topten")
+    .get(userController.topTen);
 
 router.route("/")
     .post(userController.create)

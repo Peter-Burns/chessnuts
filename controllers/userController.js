@@ -2,6 +2,11 @@ const db = require("../models");
 const passport = require('passport');
 
 module.exports = {
+    topTen: function(req,res){
+        db.User.find().limit(10).sort({rating:-1})
+            .then(dbModel=> res.json(dbModel))
+            .catch(err=>console.log(err));
+    },
     highestRated: function (req, res) {
         db.User.find({}).sort({ rating: -1 })
             .then(dbModel => res.json(dbModel.slice(0,10)))
