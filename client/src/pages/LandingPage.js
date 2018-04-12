@@ -7,6 +7,7 @@ import '../chessboard-0.3.0.css';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import FlatButton from 'material-ui/FlatButton/FlatButton';
+import {withUser} from '../services/withUser';
 
 window.$ = $;
 window.jQuery = $;
@@ -21,7 +22,14 @@ class Game extends Component {
         gameHistory: null,
         highestRated: null
     }
+    
+    startgame() {
+        this.props.history.push('/startgame');
+    }
 
+    mygames() {
+        this.props.history.push('/mygames');
+    }
     leaderboard() {
         this.props.history.push('/leaderboard');
     }
@@ -147,12 +155,13 @@ class Game extends Component {
     }
     render() {
         const { highestRated } = this.state;
+        const { user } = this.props;
         return (
             <Grid style={{ color: '#663300' }} fluid>
                 <Row style={{ fontFamily: "'Montserrat', sans-serif" }} center="xs">
                     <Col lg={4} lgOffset={2} md={6} sm={9} xs={12}>
-                        <h3>Welcome to Chessnuts!</h3>
-                        <p>Make an account to play, watch some of the top games going on below, or tinker around on the practice board</p>
+                        {user ? <div><FlatButton label='My games' backgroundColor='#ffb366' style={{ color: "#663300", fontFamily: "'Montserrat', sans-serif" }} onClick={() => this.mygames()} /><FlatButton label='Start or join a game' backgroundColor='#ffb366' style={{ color: "#663300", fontFamily: "'Montserrat', sans-serif", marginLeft:'10px' }} onClick={() => this.startgame()} /></div> : <div> <h3>Welcome to Chessnuts!</h3>
+                        <p>Make an account to play, watch some of the top games going on below, or tinker around on the practice board</p></div>}
                         <h3>Top rated active games</h3>
                         <Row>
                             <Col xs={6}>
@@ -189,4 +198,4 @@ class Game extends Component {
         );
     }
 }
-export default withRouter(Game);
+export default withRouter(withUser(Game));
