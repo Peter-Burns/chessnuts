@@ -100,7 +100,7 @@ class App extends Component {
                   <ListItem innerDivStyle={{ marginLeft: '0px' }} onClick={logout} style={{ color: '#663300' }}>Logout</ListItem>]}>
                 </ ListItem>
 
-              </List> : <Link to="/login"><LoginButton color='#ffb366'/></Link>}
+              </List> : <Link to="/login"><LoginButton backgroundColor="#663300" color='#ffb366'/></Link>}
 
             </Drawer>
           </Fragment>
